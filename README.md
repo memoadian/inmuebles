@@ -1,59 +1,111 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Inmuebles
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema **open source** para publicar y vender/rentar inmuebles: catálogo público
+con buscador y filtros, fichas de propiedad con galería de fotos, y un panel de
+control con roles y permisos para que dueños y agentes administren sus propias
+publicaciones.
 
-## About Laravel
+Pensado como una alternativa autohospedada y personalizable a portales tipo
+Inmuebles24/Vivanuncios para quien quiere controlar sus propios datos e
+infraestructura.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Funcionalidades
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Catálogo público** con búsqueda por texto, tipo de inmueble, operación
+  (venta/renta), estado, rango de precio y número de recámaras.
+- **Ficha de propiedad** con galería de imágenes, amenidades, ubicación y datos
+  de contacto del dueño/agente.
+- **Panel de control** para crear, editar y publicar propiedades, con subida y
+  reordenamiento de fotos (portada incluida).
+- **Roles y permisos** (`spatie/laravel-permission`): `Admin` gestiona todo,
+  `Agent` administra únicamente sus propias propiedades, `Client` navega el
+  catálogo.
+- **Catálogos administrables**: tipos de inmueble y amenidades.
+- **Almacenamiento de imágenes** en disco local para desarrollo o Cloudflare R2
+  (S3-compatible) en producción, con redimensionado/optimización vía
+  `intervention/image`.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Stack
 
-## Learning Laravel
+| Capa | Tecnología |
+|---|---|
+| Backend | Laravel 12, PHP 8.4 |
+| Frontend | Blade + Tailwind CSS 4 + Vite |
+| Base de datos | MySQL 8 |
+| Permisos | spatie/laravel-permission |
+| Imágenes | intervention/image + Cloudflare R2 (flysystem-aws-s3-v3) |
+| Contenedores | Docker (php-fpm + nginx + supervisor) vía docker-compose |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Requisitos
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Docker y Docker Compose (recomendado), **o**
+- PHP 8.4, Composer, Node 20+ y MySQL 8 para correrlo sin contenedores.
 
-## Laravel Sponsors
+## Puesta en marcha con Docker
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+cp .env.example .env
 
-### Premium Partners
+docker compose up -d --build
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+docker compose exec inmuebles-app php artisan key:generate
+docker compose exec inmuebles-app php artisan migrate --seed
 
-## Contributing
+docker compose exec inmuebles-app npm install
+docker compose exec inmuebles-app npm run build
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Servicios expuestos por defecto:
 
-## Code of Conduct
+| Servicio | URL |
+|---|---|
+| Aplicación | http://localhost:8000 |
+| Vite (dev) | http://localhost:5175 |
+| phpMyAdmin | http://localhost:8083 |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Usuarios de prueba (seeder)
 
-## Security Vulnerabilities
+| Rol | Email | Contraseña |
+|---|---|---|
+| Admin | `admin@inmuebles.test` | `password` |
+| Agente | `agente@inmuebles.test` | `password` |
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Puesta en marcha sin Docker
 
-## License
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Configura DB_* en .env apuntando a tu MySQL local
+php artisan migrate --seed
+
+npm install
+npm run build   # o `npm run dev` en desarrollo
+
+php artisan serve
+```
+
+## Almacenamiento de imágenes
+
+Por defecto `FILESYSTEM_DISK=public`, útil para desarrollo sin credenciales.
+Para producción, configura el disco `r2` (Cloudflare R2) con las variables
+`R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`, `R2_ENDPOINT` y
+`R2_PUBLIC_URL` en `.env` — ver `config/filesystems.php`.
+
+## Roadmap
+
+- Favoritos y búsquedas guardadas
+- Mensajería entre cliente y agente
+- Mapa interactivo de propiedades
+- Planes de publicación y pagos
+- API pública
+
+## Contribuir
+
+Este proyecto es open source y las contribuciones son bienvenidas: abre un
+issue para reportar bugs o proponer funcionalidades, o envía un pull request.
+
+## Licencia
+
+Licenciado bajo [MIT](LICENSE).
