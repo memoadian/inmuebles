@@ -38,8 +38,10 @@ infraestructura.
 
 ## Requisitos
 
-- Docker y Docker Compose (recomendado), **o**
-- PHP 8.4, Composer, Node 20+ y MySQL 8 para correrlo sin contenedores.
+- Docker y Docker Compose (recomendado) para PHP/MySQL/nginx, **más**
+- Node 20+ con [pnpm](https://pnpm.io) en tu máquina para compilar los assets
+  (el contenedor de la app no incluye Node; los assets se compilan en el host
+  y se sirven desde `public/build`).
 
 ## Puesta en marcha con Docker
 
@@ -51,8 +53,8 @@ docker compose up -d --build
 docker compose exec inmuebles-app php artisan key:generate
 docker compose exec inmuebles-app php artisan migrate --seed
 
-docker compose exec inmuebles-app npm install
-docker compose exec inmuebles-app npm run build
+pnpm install
+pnpm run build
 ```
 
 Servicios expuestos por defecto:
@@ -80,8 +82,8 @@ php artisan key:generate
 # Configura DB_* en .env apuntando a tu MySQL local
 php artisan migrate --seed
 
-npm install
-npm run build   # o `npm run dev` en desarrollo
+pnpm install
+pnpm run build   # o `pnpm run dev` en desarrollo
 
 php artisan serve
 ```
