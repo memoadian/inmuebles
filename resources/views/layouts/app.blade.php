@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full overflow-hidden">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,8 +12,11 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-slate-100">
-    <div class="flex h-screen" id="app">
+{{-- El panel es un shell fijo: sólo el contenedor interno hace scroll, nunca el
+     documento. Sin overflow-hidden aquí, html/body crecen por su cuenta y dejan
+     un espacio scrolleable vacío debajo del layout. --}}
+<body class="bg-slate-100 h-full overflow-hidden">
+    <div class="flex h-dvh overflow-hidden" id="app">
         <div id="overlay" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"></div>
 
         <aside id="sidebar"

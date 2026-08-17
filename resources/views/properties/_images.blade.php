@@ -13,15 +13,27 @@
 
     @can('uploadImages', $property)
         <form method="POST" action="{{ route('properties.images.store', $property) }}"
-              enctype="multipart/form-data" class="mb-4 flex flex-wrap items-center gap-2">
+              enctype="multipart/form-data" class="mb-4">
             @csrf
-            <input type="file" name="images[]" multiple accept="image/jpeg,image/png,image/webp" required
-                   class="text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-slate-900 file:px-3 file:py-2
-                          file:text-sm file:font-medium file:text-white hover:file:bg-slate-800">
-            <button class="rounded-lg border border-slate-300 px-3 py-2 text-sm hover:bg-slate-50">
+
+            <label for="imageInput" id="imageDropzone"
+                   class="flex flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-dashed
+                          border-slate-300 bg-slate-50 px-4 py-8 text-center cursor-pointer transition-colors
+                          hover:border-slate-400 hover:bg-slate-100">
+                <i class="bi bi-cloud-arrow-up text-3xl text-slate-400"></i>
+                <p class="text-sm text-slate-600">
+                    <span class="font-medium text-slate-900">Arrastra tus fotos aquí</span> o haz clic para buscarlas
+                </p>
+                <p class="text-xs text-slate-400">JPG, PNG o WebP · máx. 8 MB c/u</p>
+                <input id="imageInput" type="file" name="images[]" multiple
+                       accept="image/jpeg,image/png,image/webp" required class="sr-only">
+            </label>
+
+            <p id="imageFileList" class="mt-2 text-sm text-slate-600 empty:hidden"></p>
+
+            <button class="mt-3 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
                 <i class="bi bi-upload"></i> Subir
             </button>
-            <span class="text-xs text-slate-500">JPG, PNG o WebP · máx. 8 MB c/u</span>
         </form>
     @endcan
 

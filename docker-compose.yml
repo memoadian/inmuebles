@@ -12,6 +12,7 @@ services:
             - "host.docker.internal:host-gateway"
         ports:
             - "${APP_PORT:-8000}:80"
+            - "80:80" # alias local sin puerto (ej. ubiqamx.test) — solo si no corres 'pos' a la vez
             - "${VITE_PORT:-5175}:${VITE_PORT:-5175}"
         environment:
             WWWUSER: "${WWWUSER}"
