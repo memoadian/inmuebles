@@ -1,8 +1,28 @@
 @extends('layouts.public')
 
-@section('title', $property->title)
+@php
+    $operationLabel = ['sale' => 'en venta', 'rent' => 'en renta', 'both' => 'en venta o renta'][$property->operation];
+    $locationLabel = collect([$property->city?->name, $property->state?->name])->filter()->implode(', ');
+    $seoTitle = trim("{$property->title} {$operationLabel}".($locationLabel ? " en {$locationLabel}" : ''));
+
+    $metaDescription = collect([
+        "{$property->title} {$operationLabel}".($locationLabel ? " en {$locationLabel}" : '').'.',
+        $property->bedrooms ? "{$property->bedrooms} recámaras" : null,
+        $property->bathrooms ? "{$property->bathrooms} baños" : null,
+        $property->built_area ? (int) $property->built_area.' m² construidos' : null,
+    ])->filter()->implode(' ');
+    $metaDescription = \Illuminate\Support\Str::limit($metaDescription.' $'.number_format($property->price, 0).' '.$property->currency.'.', 160);
+@endphp
+
+@section('title', $seoTitle)
+@section('meta_description', $metaDescription)
+@section('og_type', 'website')
+@if ($property->cover)
+    @section('og_image', $property->cover->url)
+@endif
 
 @section('content')
+    <x-property-structured-data :property="$property" />
     <div class="mx-auto max-w-7xl px-4 py-6">
         <a href="{{ route('public.properties.index') }}"
            class="inline-flex items-center gap-1.5 mb-5 text-sm text-stone-600 hover:text-brand-700">

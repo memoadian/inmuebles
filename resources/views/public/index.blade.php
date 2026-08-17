@@ -1,6 +1,20 @@
 @extends('layouts.public')
 
-@section('title', 'Inmuebles en venta y renta')
+@php
+    $selectedType = $types->firstWhere('id', (int) request('type'));
+    $selectedState = $states->firstWhere('id', (int) request('state'));
+    $operationLabel = ['sale' => 'en venta', 'rent' => 'en renta'][request('operation')] ?? 'en venta y renta';
+
+    $seoTitle = trim(collect([$selectedType?->name ?? 'Inmuebles', $operationLabel, $selectedState ? "en {$selectedState->name}" : null])->filter()->implode(' '));
+    $total = $properties->total();
+    $metaDescription = "{$seoTitle}. Explora {$total} "
+        .\Illuminate\Support\Str::plural('propiedad', $total).' '
+        .($total === 1 ? 'publicada' : 'publicadas')
+        .' directamente por sus dueños y agentes en México.';
+@endphp
+
+@section('title', $seoTitle)
+@section('meta_description', $metaDescription)
 
 @section('content')
     <section class="relative overflow-hidden bg-gradient-to-br from-brand-950 via-brand-900 to-brand-700">

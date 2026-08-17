@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\AiExtractionException;
 use App\Models\Feature;
 use App\Models\PropertyType;
 use App\Models\State;
 use App\Services\PropertyAiExtractionService;
 use Illuminate\Http\Request;
-use RuntimeException;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class PropertyAiExtractionController extends Controller
 {
@@ -17,7 +19,7 @@ class PropertyAiExtractionController extends Controller
         abort_unless($request->user()->can('properties.create') || $request->user()->can('properties.edit'), 403);
 
         $data = $request->validate([
-            'text' => ['required', 'string', 'max:5000'],
+            'text' => ['required', 'string', 'max:2500'],
         ]);
 
         $catalog = [
@@ -28,8 +30,16 @@ class PropertyAiExtractionController extends Controller
 
         try {
             $extracted = $service->extract($data['text'], $catalog);
-        } catch (RuntimeException $e) {
-            return response()->json(['message' => $e->getMessage()], 502);
+        } catch (AiExtractionException $e) {
+            // El detalle real (status, body de Groq) sólo va al log; al usuario
+            // le llega un mensaje seguro y accionable, nunca la respuesta cruda.
+            report($e);
+
+            return response()->json(['message' => $e->userMessage()], $e->httpStatus());
+        } catch (Throwable $e) {
+            Log::error('ai_extract.unexpected', ['exception' => $e->getMessage()]);
+
+            return response()->json(['message' => 'Ocurrió un error inesperado. Intenta de nuevo.'], 500);
         }
 
         return response()->json($extracted);

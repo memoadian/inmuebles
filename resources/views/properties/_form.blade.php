@@ -10,10 +10,14 @@
     <h2 class="font-medium text-slate-800 mb-1 flex items-center gap-2">
         <i class="bi bi-stars text-slate-500"></i> Autocompletar con IA
     </h2>
-    <p class="text-xs text-slate-500 mb-3">
+    <p class="text-xs text-slate-500 mb-1">
         Pega la descripción que ya tengas (WhatsApp, un anuncio anterior, tus notas) y la IA intenta llenar los campos de abajo. Siempre revisa el resultado antes de guardar.
     </p>
-    <textarea id="aiExtractText" rows="4" class="{{ $input }}"
+    <p class="text-xs text-amber-700 mb-3">
+        <i class="bi bi-shield-exclamation"></i>
+        No pegues datos personales del cliente (nombre, teléfono, correo) — solo la descripción del inmueble. Ese texto se envía a un proveedor de IA externo.
+    </p>
+    <textarea id="aiExtractText" rows="4" maxlength="2500" class="{{ $input }}"
               placeholder="Ej. Casa de 3 recámaras y 2 baños en Coyoacán, CDMX, 180 m² de terreno, $5,200,000..."></textarea>
     <div class="mt-2 flex items-center gap-3">
         <button type="button" id="aiExtractBtn" data-url="{{ route('properties.ai-extract') }}"
@@ -32,11 +36,19 @@
 
             <div class="space-y-4">
                 <div>
-                    <label for="title" class="{{ $label }}">Título</label>
+                    <div class="flex items-center justify-between mb-1">
+                        <label for="title" class="{{ $label }} mb-0">Título</label>
+                        <button type="button" id="aiSuggestTitlesBtn" data-url="{{ route('properties.ai-suggest-titles') }}"
+                                class="inline-flex items-center gap-1 text-xs font-medium text-slate-600 hover:text-slate-900">
+                            <i class="bi bi-stars"></i> Sugerir con IA
+                        </button>
+                    </div>
                     <input id="title" name="title" type="text" required
                            value="{{ old('title', $property?->title) }}"
                            placeholder="Casa en venta en Del Valle con jardín"
                            class="{{ $input }}">
+                    <p id="aiSuggestTitlesStatus" class="mt-1 text-xs text-slate-500 empty:hidden"></p>
+                    <div id="aiSuggestTitlesList" class="mt-2 flex flex-col gap-1.5 empty:hidden"></div>
                 </div>
 
                 <div class="grid gap-4 sm:grid-cols-2">

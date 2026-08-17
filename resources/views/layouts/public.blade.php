@@ -4,10 +4,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Inmuebles') - {{ config('app.name', 'Inmuebles') }}</title>
+    <meta name="description" content="@yield('meta_description', 'Encuentra casas, departamentos, terrenos y locales en venta o renta en México, publicados directamente por sus dueños y agentes.')">
+    <link rel="canonical" href="{{ url()->current() }}">
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:title" content="@yield('title', 'Inmuebles') - {{ config('app.name', 'Inmuebles') }}">
+    <meta property="og:description" content="@yield('meta_description', 'Encuentra casas, departamentos, terrenos y locales en venta o renta en México.')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    @hasSection('og_image')
+        <meta property="og:image" content="@yield('og_image')">
+    @endif
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700|fraunces:500,600,700" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     @vite(['resources/css/app.css'])
+    @stack('json_ld')
 </head>
 <body class="bg-stone-50 min-h-screen flex flex-col text-stone-800 antialiased">
     <header class="bg-stone-50/90 backdrop-blur border-b border-stone-200 sticky top-0 z-40">

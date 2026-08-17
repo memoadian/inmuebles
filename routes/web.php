@@ -8,6 +8,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PropertyAiExtractionController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyImageController;
+use App\Http\Controllers\PropertyTitleSuggestionController;
 use App\Http\Controllers\PropertyTypeController;
 use App\Http\Controllers\PublicPropertyController;
 use App\Http\Controllers\RoleController;
@@ -50,7 +51,11 @@ Route::middleware('auth')->group(function () {
     Route::post('properties/{property}/publish', [PropertyController::class, 'togglePublish'])
         ->name('properties.publish');
     Route::post('properties-ai-extract', PropertyAiExtractionController::class)
+        ->middleware('throttle:ai-groq')
         ->name('properties.ai-extract');
+    Route::post('properties-ai-suggest-titles', PropertyTitleSuggestionController::class)
+        ->middleware('throttle:ai-groq')
+        ->name('properties.ai-suggest-titles');
 
     // Imágenes
     Route::post('properties/{property}/images', [PropertyImageController::class, 'store'])

@@ -188,3 +188,93 @@ if (aiExtractBtn && aiExtractText) {
         }
     });
 }
+
+// Sugerir títulos llamativos a partir de los campos YA llenados del formulario
+// (no del texto libre de "Autocompletar con IA" — son dos features separadas).
+const aiSuggestTitlesBtn = document.getElementById('aiSuggestTitlesBtn');
+const aiSuggestTitlesStatus = document.getElementById('aiSuggestTitlesStatus');
+const aiSuggestTitlesList = document.getElementById('aiSuggestTitlesList');
+
+if (aiSuggestTitlesBtn) {
+    const fieldValue = (id) => document.getElementById(id)?.value?.trim() || null;
+
+    const selectedText = (id) => {
+        const select = document.getElementById(id);
+        if (!select || !select.value) return null;
+        return select.options[select.selectedIndex]?.textContent?.trim() || null;
+    };
+
+    const selectedFeatureNames = () => {
+        return Array.from(document.querySelectorAll('input[name="features[]"]:checked'))
+            .map((checkbox) => checkbox.closest('label')?.querySelector('span')?.textContent?.trim())
+            .filter(Boolean);
+    };
+
+    const buildPayload = () => ({
+        property_type: selectedText('property_type_id'),
+        operation: fieldValue('operation'),
+        price: fieldValue('price'),
+        currency: fieldValue('currency'),
+        state: selectedText('state_id'),
+        bedrooms: fieldValue('bedrooms'),
+        bathrooms: fieldValue('bathrooms'),
+        built_area: fieldValue('built_area'),
+        land_area: fieldValue('land_area'),
+        features: selectedFeatureNames(),
+    });
+
+    const renderTitles = (titles) => {
+        aiSuggestTitlesList.innerHTML = '';
+        titles.forEach((title) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'text-left rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 hover:border-slate-400 hover:bg-white';
+            btn.textContent = title;
+            btn.addEventListener('click', () => {
+                document.getElementById('title').value = title;
+                aiSuggestTitlesList.innerHTML = '';
+                aiSuggestTitlesStatus.textContent = '';
+            });
+            aiSuggestTitlesList.appendChild(btn);
+        });
+    };
+
+    aiSuggestTitlesBtn.addEventListener('click', async () => {
+        const payload = buildPayload();
+
+        if (!payload.property_type || !payload.operation) {
+            aiSuggestTitlesStatus.textContent = 'Llena al menos el tipo de inmueble y la operación primero.';
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+        aiSuggestTitlesBtn.disabled = true;
+        aiSuggestTitlesList.innerHTML = '';
+        aiSuggestTitlesStatus.textContent = 'Generando sugerencias…';
+
+        try {
+            const response = await fetch(aiSuggestTitlesBtn.dataset.url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-CSRF-TOKEN': csrfToken ?? '',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'No se pudieron generar títulos.');
+            }
+
+            renderTitles(data.titles ?? []);
+            aiSuggestTitlesStatus.textContent = 'Elige un título o sigue editando el tuyo.';
+        } catch (error) {
+            aiSuggestTitlesStatus.textContent = error.message || 'Error al conectar con la IA.';
+        } finally {
+            aiSuggestTitlesBtn.disabled = false;
+        }
+    });
+}
