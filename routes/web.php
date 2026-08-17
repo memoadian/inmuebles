@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeatureController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PropertyAiExtractionController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\PropertyImageController;
 use App\Http\Controllers\PropertyTypeController;
@@ -48,6 +49,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('properties', PropertyController::class);
     Route::post('properties/{property}/publish', [PropertyController::class, 'togglePublish'])
         ->name('properties.publish');
+    Route::post('properties-ai-extract', PropertyAiExtractionController::class)
+        ->name('properties.ai-extract');
 
     // Imágenes
     Route::post('properties/{property}/images', [PropertyImageController::class, 'store'])

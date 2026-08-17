@@ -89,3 +89,102 @@ if (imageDropzone && imageInput) {
 
     imageInput.addEventListener('change', () => renderSelectedFiles(imageInput.files));
 }
+
+// Autocompletar el formulario de propiedades a partir de texto libre (Groq + Llama 3.1 8B).
+const aiExtractBtn = document.getElementById('aiExtractBtn');
+const aiExtractText = document.getElementById('aiExtractText');
+const aiExtractStatus = document.getElementById('aiExtractStatus');
+
+if (aiExtractBtn && aiExtractText) {
+    const normalize = (value) => value.trim().toLowerCase();
+
+    const setSelectByText = (select, text) => {
+        if (!select || !text) return;
+        const target = normalize(text);
+        const option = Array.from(select.options).find((o) => normalize(o.textContent) === target);
+        if (option) select.value = option.value;
+    };
+
+    const setSelectByValue = (select, value) => {
+        if (!select || !value) return;
+        const exists = Array.from(select.options).some((o) => o.value === value);
+        if (exists) select.value = value;
+    };
+
+    const setField = (id, value) => {
+        if (value === undefined || value === null || value === '') return;
+        const el = document.getElementById(id);
+        if (el) el.value = value;
+    };
+
+    const applyExtraction = (data) => {
+        setField('title', data.title);
+        setField('description', data.description);
+        setField('price', data.price);
+        setField('maintenance_fee', data.maintenance_fee);
+        setField('bedrooms', data.bedrooms);
+        setField('bathrooms', data.bathrooms);
+        setField('half_bathrooms', data.half_bathrooms);
+        setField('parking_spaces', data.parking_spaces);
+        setField('land_area', data.land_area);
+        setField('built_area', data.built_area);
+        setField('floors', data.floors);
+        setField('age_years', data.age_years);
+        setField('street', data.street);
+        setField('ext_number', data.ext_number);
+        setField('int_number', data.int_number);
+        setField('postal_code', data.postal_code);
+
+        setSelectByValue(document.getElementById('operation'), data.operation);
+        setSelectByValue(document.getElementById('currency'), data.currency);
+        setSelectByText(document.getElementById('property_type_id'), data.property_type);
+        setSelectByText(document.getElementById('state_id'), data.state);
+
+        if (Array.isArray(data.features) && data.features.length) {
+            const wanted = data.features.map(normalize);
+            document.querySelectorAll('input[name="features[]"]').forEach((checkbox) => {
+                const label = checkbox.closest('label')?.querySelector('span');
+                if (label && wanted.includes(normalize(label.textContent))) {
+                    checkbox.checked = true;
+                }
+            });
+        }
+    };
+
+    aiExtractBtn.addEventListener('click', async () => {
+        const text = aiExtractText.value.trim();
+        if (!text) {
+            aiExtractStatus.textContent = 'Pega primero una descripción.';
+            return;
+        }
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+        aiExtractBtn.disabled = true;
+        aiExtractStatus.textContent = 'Analizando con IA…';
+
+        try {
+            const response = await fetch(aiExtractBtn.dataset.url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-CSRF-TOKEN': csrfToken ?? '',
+                },
+                body: JSON.stringify({ text }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'No se pudo autocompletar.');
+            }
+
+            applyExtraction(data);
+            aiExtractStatus.textContent = 'Listo. Revisa los campos antes de guardar.';
+        } catch (error) {
+            aiExtractStatus.textContent = error.message || 'Error al conectar con la IA.';
+        } finally {
+            aiExtractBtn.disabled = false;
+        }
+    });
+}

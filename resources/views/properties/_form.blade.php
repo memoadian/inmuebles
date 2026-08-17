@@ -6,6 +6,24 @@
     $label = 'block text-sm font-medium text-slate-700 mb-1';
 @endphp
 
+<section class="bg-white rounded-xl border border-slate-200 p-4 mb-6">
+    <h2 class="font-medium text-slate-800 mb-1 flex items-center gap-2">
+        <i class="bi bi-stars text-slate-500"></i> Autocompletar con IA
+    </h2>
+    <p class="text-xs text-slate-500 mb-3">
+        Pega la descripción que ya tengas (WhatsApp, un anuncio anterior, tus notas) y la IA intenta llenar los campos de abajo. Siempre revisa el resultado antes de guardar.
+    </p>
+    <textarea id="aiExtractText" rows="4" class="{{ $input }}"
+              placeholder="Ej. Casa de 3 recámaras y 2 baños en Coyoacán, CDMX, 180 m² de terreno, $5,200,000..."></textarea>
+    <div class="mt-2 flex items-center gap-3">
+        <button type="button" id="aiExtractBtn" data-url="{{ route('properties.ai-extract') }}"
+                class="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50 disabled:opacity-50">
+            <i class="bi bi-stars"></i> Autocompletar
+        </button>
+        <span id="aiExtractStatus" class="text-xs text-slate-500"></span>
+    </div>
+</section>
+
 <div class="grid gap-6 lg:grid-cols-3">
     <div class="lg:col-span-2 space-y-6">
         {{-- Datos generales --}}
