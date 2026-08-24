@@ -35,3 +35,7 @@
     {{-- La galería vive fuera del form principal: sube por su propio endpoint --}}
     @include('properties._images')
 @endsection
+
+@push('scripts')
+    @vite('resources/js/map.js')
+@endpush

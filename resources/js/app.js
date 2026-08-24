@@ -122,6 +122,8 @@ if (aiExtractBtn && aiExtractText) {
         setField('description', data.description);
         setField('price', data.price);
         setField('maintenance_fee', data.maintenance_fee);
+        setField('property_tax_estimate', data.property_tax_estimate);
+        setField('services_estimate', data.services_estimate);
         setField('bedrooms', data.bedrooms);
         setField('bathrooms', data.bathrooms);
         setField('half_bathrooms', data.half_bathrooms);
@@ -129,6 +131,7 @@ if (aiExtractBtn && aiExtractText) {
         setField('land_area', data.land_area);
         setField('built_area', data.built_area);
         setField('floors', data.floors);
+        setField('floor_number', data.floor_number);
         setField('age_years', data.age_years);
         setField('street', data.street);
         setField('ext_number', data.ext_number);
@@ -137,6 +140,9 @@ if (aiExtractBtn && aiExtractText) {
 
         setSelectByValue(document.getElementById('operation'), data.operation);
         setSelectByValue(document.getElementById('currency'), data.currency);
+        setSelectByValue(document.getElementById('condition'), data.condition);
+        setSelectByValue(document.getElementById('orientation'), data.orientation);
+        setSelectByValue(document.getElementById('position'), data.position);
         setSelectByText(document.getElementById('property_type_id'), data.property_type);
         setSelectByText(document.getElementById('state_id'), data.state);
 

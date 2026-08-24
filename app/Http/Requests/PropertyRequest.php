@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Property;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -11,6 +12,27 @@ class PropertyRequest extends FormRequest
     {
         // La autorización real vive en PropertyPolicy, aplicada en el controlador.
         return true;
+    }
+
+    /**
+     * Las comisiones son datos internos: quien no tenga el permiso no puede
+     * mandarlas ni por accidente ni a mano. Al quitarlas del input, un update
+     * simplemente conserva el valor que ya tenía la propiedad.
+     */
+    protected function prepareForValidation(): void
+    {
+        if (! $this->user()?->can('properties.view-commission')) {
+            foreach (Property::COMMISSION_FIELDS as $field) {
+                $this->request->remove($field);
+            }
+        }
+
+        // Un checkbox desmarcado no se envía: sin esto nunca se podría quitar
+        // el destacado ni la exclusiva una vez puestos.
+        $this->merge([
+            'is_featured' => $this->boolean('is_featured'),
+            'is_exclusive' => $this->boolean('is_exclusive'),
+        ]);
     }
 
     public function rules(): array
@@ -24,6 +46,8 @@ class PropertyRequest extends FormRequest
             'price' => ['required', 'numeric', 'min:0', 'max:999999999999'],
             'currency' => ['required', Rule::in(['MXN', 'USD'])],
             'maintenance_fee' => ['nullable', 'numeric', 'min:0'],
+            'property_tax_estimate' => ['nullable', 'numeric', 'min:0'],
+            'services_estimate' => ['nullable', 'numeric', 'min:0'],
 
             'bedrooms' => ['nullable', 'integer', 'min:0', 'max:99'],
             'bathrooms' => ['nullable', 'integer', 'min:0', 'max:99'],
@@ -33,7 +57,12 @@ class PropertyRequest extends FormRequest
             'land_area' => ['nullable', 'numeric', 'min:0'],
             'built_area' => ['nullable', 'numeric', 'min:0'],
             'floors' => ['nullable', 'integer', 'min:0', 'max:200'],
+            'floor_number' => ['nullable', 'integer', 'min:0', 'max:200'],
             'age_years' => ['nullable', 'integer', 'min:0', 'max:500'],
+
+            'condition' => ['nullable', Rule::in(array_keys(Property::CONDITIONS))],
+            'orientation' => ['nullable', Rule::in(array_keys(Property::ORIENTATIONS))],
+            'position' => ['nullable', Rule::in(array_keys(Property::POSITIONS))],
 
             'street' => ['nullable', 'string', 'max:255'],
             'ext_number' => ['nullable', 'string', 'max:20'],
@@ -49,6 +78,10 @@ class PropertyRequest extends FormRequest
 
             'status' => ['required', Rule::in(['draft', 'published', 'reserved', 'sold', 'rented', 'inactive'])],
             'is_featured' => ['nullable', 'boolean'],
+
+            'is_exclusive' => ['nullable', 'boolean'],
+            'rent_commission' => ['nullable', Rule::in(array_keys(Property::RENT_COMMISSIONS))],
+            'sale_commission_percent' => ['nullable', 'numeric', 'between:1,6'],
 
             'features' => ['nullable', 'array'],
             'features.*' => ['exists:features,id'],
@@ -67,6 +100,14 @@ class PropertyRequest extends FormRequest
             'bathrooms' => 'baños',
             'land_area' => 'superficie de terreno',
             'built_area' => 'superficie construida',
+            'floor_number' => 'piso en el que se encuentra',
+            'condition' => 'condición',
+            'orientation' => 'orientación',
+            'position' => 'interior/exterior',
+            'rent_commission' => 'comisión de renta',
+            'sale_commission_percent' => 'comisión de venta',
+            'property_tax_estimate' => 'predial anual estimado',
+            'services_estimate' => 'servicios mensuales estimados',
         ];
     }
 }

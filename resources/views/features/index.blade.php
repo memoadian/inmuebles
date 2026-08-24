@@ -15,6 +15,7 @@
             <thead class="bg-slate-50 text-left text-slate-500">
                 <tr>
                     <th class="px-4 py-3 font-medium">Nombre</th>
+                    <th class="px-4 py-3 font-medium">Grupo</th>
                     <th class="px-4 py-3 font-medium">Slug</th>
                     <th class="px-4 py-3 font-medium">Propiedades</th>
                     <th class="px-4 py-3 font-medium">Estado</th>
@@ -25,6 +26,7 @@
                 @forelse ($features as $feature)
                     <tr>
                         <td class="px-4 py-3 font-medium text-slate-800">{{ $feature->name }}</td>
+                        <td class="px-4 py-3 text-slate-600">{{ $feature->group_label }}</td>
                         <td class="px-4 py-3 font-mono text-xs text-slate-500">{{ $feature->slug }}</td>
                         <td class="px-4 py-3 text-slate-600">{{ $feature->properties_count }}</td>
                         <td class="px-4 py-3">
@@ -45,7 +47,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="5" class="px-4 py-12 text-center text-slate-500">Sin amenidades registradas.</td></tr>
+                    <tr><td colspan="6" class="px-4 py-12 text-center text-slate-500">Sin amenidades registradas.</td></tr>
                 @endforelse
             </tbody>
         </table>

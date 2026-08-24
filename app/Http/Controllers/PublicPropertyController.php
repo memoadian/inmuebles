@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Feature;
 use App\Models\Property;
 use App\Models\PropertyType;
 use App\Models\State;
+use App\Services\PropertyPdfService;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class PublicPropertyController extends Controller
 {
@@ -25,6 +28,12 @@ class PublicPropertyController extends Controller
             ->when($request->filled('min_price'), fn ($q) => $q->where('price', '>=', $request->min_price))
             ->when($request->filled('max_price'), fn ($q) => $q->where('price', '<=', $request->max_price))
             ->when($request->filled('bedrooms'), fn ($q) => $q->where('bedrooms', '>=', $request->bedrooms))
+            // Amenidades: se piden TODAS las marcadas, no cualquiera de ellas.
+            ->when($request->filled('features'), function ($q) use ($request) {
+                foreach (array_filter(array_map('intval', (array) $request->input('features'))) as $featureId) {
+                    $q->whereHas('features', fn ($sub) => $sub->where('features.id', $featureId));
+                }
+            })
             ->orderByDesc('is_featured')
             ->orderByDesc('published_at')
             ->paginate(12)
@@ -34,6 +43,7 @@ class PublicPropertyController extends Controller
             'properties' => $properties,
             'types' => PropertyType::active()->orderBy('name')->get(),
             'states' => State::orderBy('name')->get(),
+            'features' => Feature::active()->ordered()->get()->groupBy('group'),
         ]);
     }
 
@@ -41,7 +51,10 @@ class PublicPropertyController extends Controller
     {
         abort_unless($property->isPublished(), 404);
 
-        $property->load(['type', 'state', 'city', 'neighborhood', 'images', 'features', 'user']);
+        $property->load([
+            'type', 'state', 'city', 'neighborhood', 'images', 'user',
+            'features' => fn ($q) => $q->ordered(),
+        ]);
         $property->increment('views_count');
 
         $similar = Property::published()
@@ -52,5 +65,13 @@ class PublicPropertyController extends Controller
             ->get();
 
         return view('public.show', compact('property', 'similar'));
+    }
+
+    /** Ficha técnica descargable (punto 14 del cliente). */
+    public function pdf(Property $property, PropertyPdfService $pdf): Response
+    {
+        abort_unless($property->isPublished(), 404);
+
+        return $pdf->build($property)->download($pdf->filename($property));
     }
 }

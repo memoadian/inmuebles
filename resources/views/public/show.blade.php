@@ -87,15 +87,79 @@
                     @endif
                 </section>
 
-                @if ($property->features->isNotEmpty())
+                @php
+                    // Ficha técnica: sólo se listan los datos que sí se capturaron.
+                    $specs = collect([
+                        'Tipo de inmueble' => $property->type?->name,
+                        'Condición' => $property->condition_label,
+                        'Niveles de la propiedad' => $property->floors,
+                        'Piso en el que se encuentra' => $property->floor_number,
+                        'Orientación' => $property->orientation_label,
+                        'Ubicación en el edificio' => $property->position_label,
+                        'Antigüedad' => $property->age_years !== null
+                            ? $property->age_years.' '.\Illuminate\Support\Str::plural('año', $property->age_years)
+                            : null,
+                        'Medios baños' => $property->half_bathrooms ?: null,
+                        'Publicado el' => $property->published_at?->translatedFormat('d \d\e F \d\e Y'),
+                        'Última actualización' => $property->updated_at?->diffForHumans(),
+                    ])->filter(fn ($value) => $value !== null && $value !== '');
+                @endphp
+
+                @if ($specs->isNotEmpty())
                     <section class="bg-white rounded-2xl border border-stone-200 p-5 md:p-6">
-                        <h2 class="font-serif text-lg font-semibold text-brand-950 mb-4">Amenidades</h2>
-                        <div class="grid gap-3 sm:grid-cols-3 text-sm text-stone-700">
-                            @foreach ($property->features as $feature)
-                                <span class="inline-flex items-center gap-2">
-                                    <i class="bi bi-check-circle-fill text-brand-600"></i> {{ $feature->name }}
-                                </span>
+                        <h2 class="font-serif text-lg font-semibold text-brand-950 mb-4">Ficha técnica</h2>
+                        <dl class="grid gap-x-8 gap-y-3 sm:grid-cols-2">
+                            @foreach ($specs as $term => $value)
+                                <div class="flex items-baseline justify-between gap-4 border-b border-stone-100 pb-2">
+                                    <dt class="text-sm text-stone-500">{{ $term }}</dt>
+                                    <dd class="text-sm font-medium text-stone-800 text-right">{{ $value }}</dd>
+                                </div>
                             @endforeach
+                        </dl>
+                    </section>
+                @endif
+
+                @if ($property->features->isNotEmpty())
+                    @php $grouped = $property->features->groupBy('group'); @endphp
+                    <section class="bg-white rounded-2xl border border-stone-200 p-5 md:p-6 space-y-5">
+                        @foreach (\App\Models\Feature::GROUPS as $group => $groupLabel)
+                            @if ($grouped->has($group))
+                                <div>
+                                    <h2 class="font-serif text-lg font-semibold text-brand-950 mb-4">{{ $groupLabel }}</h2>
+                                    <div class="grid gap-3 sm:grid-cols-3 text-sm text-stone-700">
+                                        @foreach ($grouped[$group] as $feature)
+                                            <span class="inline-flex items-center gap-2">
+                                                <i class="bi bi-check-circle-fill text-brand-600"></i> {{ $feature->name }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                    </section>
+                @endif
+
+                @if ($property->hasCoordinates())
+                    <section class="bg-white rounded-2xl border border-stone-200 p-5 md:p-6">
+                        <h2 class="font-serif text-lg font-semibold text-brand-950 mb-1">Ubicación</h2>
+                        <p class="text-sm text-stone-500 mb-4">
+                            Zona aproximada del inmueble. La dirección exacta se comparte al contactar al asesor.
+                        </p>
+                        <div data-map-wrapper class="relative">
+                            <div id="propertyMap"
+                                 data-lat="{{ $property->latitude }}"
+                                 data-lng="{{ $property->longitude }}"
+                                 data-height="h-96 md:h-[30rem]"
+                                 class="h-96 md:h-[30rem] w-full rounded-xl border border-stone-200 bg-stone-100 z-0"></div>
+
+                            <button type="button" data-map-expand
+                                    aria-label="Ampliar el mapa a pantalla completa"
+                                    class="absolute top-3 right-3 z-[500] inline-flex items-center gap-1.5 rounded-xl border
+                                           border-stone-300 bg-white/95 px-3 py-1.5 text-xs font-medium text-stone-700
+                                           shadow-sm backdrop-blur hover:bg-white">
+                                <i class="bi bi-arrows-fullscreen" data-map-expand-icon></i>
+                                <span class="hidden sm:inline" data-map-expand-label>Ampliar</span>
+                            </button>
                         </div>
                     </section>
                 @endif
@@ -110,10 +174,23 @@
                         ${{ number_format($property->price, 0) }}
                         <span class="font-sans text-lg font-normal text-stone-500">{{ $property->currency }}</span>
                     </p>
-                    @if ($property->maintenance_fee)
-                        <p class="mt-1 text-sm text-stone-500">
-                            + ${{ number_format($property->maintenance_fee, 0) }} de mantenimiento
-                        </p>
+                    @if ($property->estimated_monthly_cost)
+                        <div class="mt-3 rounded-xl bg-stone-50 border border-stone-200 p-3">
+                            <p class="text-sm font-medium text-stone-700">
+                                + ${{ number_format($property->estimated_monthly_cost, 0) }} al mes estimados
+                            </p>
+                            <ul class="mt-1.5 space-y-0.5 text-xs text-stone-500">
+                                @if ($property->maintenance_fee)
+                                    <li>Mantenimiento: ${{ number_format($property->maintenance_fee, 0) }}</li>
+                                @endif
+                                @if ($property->services_estimate)
+                                    <li>Servicios: ${{ number_format($property->services_estimate, 0) }}</li>
+                                @endif
+                                @if ($property->property_tax_estimate)
+                                    <li>Predial: ${{ number_format($property->property_tax_estimate, 0) }} al año</li>
+                                @endif
+                            </ul>
+                        </div>
                     @endif
 
                     <div class="mt-5 pt-5 border-t border-stone-100">
@@ -133,6 +210,17 @@
                                   text-sm font-medium text-stone-700 hover:bg-stone-50 transition-colors">
                             <i class="bi bi-envelope"></i> Enviar correo
                         </a>
+                    </div>
+
+                    <div class="mt-5 pt-5 border-t border-stone-100">
+                        <a href="{{ route('public.properties.pdf', $property->slug) }}"
+                           class="flex items-center justify-center gap-2 rounded-xl border border-stone-300 px-4 py-2.5
+                                  text-sm font-medium text-stone-700 hover:bg-stone-50 transition-colors">
+                            <i class="bi bi-file-earmark-arrow-down"></i> Descargar ficha en PDF
+                        </a>
+
+                        <p class="mt-4 mb-2 text-sm text-stone-500">Compartir</p>
+                        <x-share-buttons :url="url()->current()" :title="$property->title" />
                     </div>
                 </section>
             </div>
@@ -161,3 +249,7 @@
         @endif
     </div>
 @endsection
+
+@push('scripts')
+    @vite(['resources/js/map.js', 'resources/js/share.js'])
+@endpush

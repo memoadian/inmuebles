@@ -82,12 +82,46 @@
                 </select>
             </div>
 
+            @php $selectedFeatures = array_map('intval', (array) request('features', [])); @endphp
+
+            <details class="mt-3 group" @if ($selectedFeatures) open @endif>
+                <summary class="inline-flex cursor-pointer list-none items-center gap-1.5 text-sm text-stone-600 hover:text-brand-700">
+                    <i class="bi bi-chevron-right transition-transform group-open:rotate-90"></i>
+                    Amenidades y características
+                    @if ($selectedFeatures)
+                        <span class="rounded-full bg-brand-700 px-2 py-0.5 text-xs font-medium text-white">
+                            {{ count($selectedFeatures) }}
+                        </span>
+                    @endif
+                </summary>
+
+                <div class="mt-3 space-y-4 rounded-xl border border-stone-200 bg-stone-50 p-4">
+                    @foreach (\App\Models\Feature::GROUPS as $group => $groupLabel)
+                        @if ($features->has($group))
+                            <div>
+                                <p class="mb-2 text-xs font-medium uppercase tracking-wide text-stone-500">{{ $groupLabel }}</p>
+                                <div class="grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                                    @foreach ($features[$group] as $feature)
+                                        <label class="flex items-center gap-2 text-sm text-stone-700">
+                                            <input type="checkbox" name="features[]" value="{{ $feature->id }}"
+                                                   @checked(in_array($feature->id, $selectedFeatures, true))
+                                                   class="rounded border-stone-300 text-brand-700 focus:ring-brand-600">
+                                            <span>{{ $feature->name }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            </details>
+
             <div class="mt-4 flex items-center gap-4">
                 <button class="inline-flex items-center gap-2 rounded-xl bg-brand-700 px-5 py-2.5 text-sm font-medium text-white
                                shadow-sm hover:bg-brand-800 transition-colors">
                     <i class="bi bi-search"></i> Buscar
                 </button>
-                @if (request()->hasAny(['q', 'type', 'operation', 'state', 'min_price', 'max_price', 'bedrooms']))
+                @if (request()->hasAny(['q', 'type', 'operation', 'state', 'min_price', 'max_price', 'bedrooms', 'features']))
                     <a href="{{ route('public.properties.index') }}" class="text-sm text-stone-500 hover:text-brand-700 hover:underline">
                         Limpiar filtros
                     </a>

@@ -7,14 +7,28 @@
         <div class="flex items-center gap-2">
             <x-property-status :status="$property->status" />
             <span class="text-sm text-slate-500">{{ $property->type?->name }}</span>
+            @if ($property->is_exclusive)
+                <span class="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800">
+                    <i class="bi bi-star-fill"></i> En exclusiva
+                </span>
+            @endif
         </div>
 
-        @can('update', $property)
-            <a href="{{ route('properties.edit', $property) }}"
-               class="rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800">
-                <i class="bi bi-pencil"></i> Editar
-            </a>
-        @endcan
+        <div class="flex items-center gap-2">
+            @if ($property->isPublished())
+                <a href="{{ route('public.properties.pdf', $property->slug) }}"
+                   class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50">
+                    <i class="bi bi-file-earmark-arrow-down"></i> Ficha PDF
+                </a>
+            @endif
+
+            @can('update', $property)
+                <a href="{{ route('properties.edit', $property) }}"
+                   class="rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800">
+                    <i class="bi bi-pencil"></i> Editar
+                </a>
+            @endcan
+        </div>
     </div>
 
     <div class="grid gap-6 lg:grid-cols-3">
@@ -39,15 +53,22 @@
             </section>
 
             @if ($property->features->isNotEmpty())
-                <section class="bg-white rounded-xl border border-slate-200 p-4">
-                    <h2 class="font-medium text-slate-800 mb-3">Amenidades</h2>
-                    <div class="flex flex-wrap gap-2">
-                        @foreach ($property->features as $feature)
-                            <span class="rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-700">
-                                {{ $feature->name }}
-                            </span>
-                        @endforeach
-                    </div>
+                @php $grouped = $property->features->groupBy('group'); @endphp
+                <section class="bg-white rounded-xl border border-slate-200 p-4 space-y-4">
+                    @foreach (\App\Models\Feature::GROUPS as $group => $groupLabel)
+                        @if ($grouped->has($group))
+                            <div>
+                                <h2 class="font-medium text-slate-800 mb-3">{{ $groupLabel }}</h2>
+                                <div class="flex flex-wrap gap-2">
+                                    @foreach ($grouped[$group] as $feature)
+                                        <span class="rounded-full bg-slate-100 px-3 py-1 text-sm text-slate-700">
+                                            {{ $feature->name }}
+                                        </span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
                 </section>
             @endif
         </div>
@@ -63,7 +84,40 @@
                         Mantenimiento: ${{ number_format($property->maintenance_fee, 2) }}
                     </p>
                 @endif
+                @if ($property->services_estimate)
+                    <p class="text-sm text-slate-500">
+                        Servicios: ${{ number_format($property->services_estimate, 2) }} al mes
+                    </p>
+                @endif
+                @if ($property->property_tax_estimate)
+                    <p class="text-sm text-slate-500">
+                        Predial: ${{ number_format($property->property_tax_estimate, 2) }} al año
+                    </p>
+                @endif
             </section>
+
+            @can('properties.view-commission')
+                @if ($property->rent_commission || $property->sale_commission_percent)
+                    <section class="bg-white rounded-xl border border-slate-200 p-4">
+                        <h2 class="font-medium text-slate-800 mb-1">Comisiones</h2>
+                        <p class="text-xs text-slate-500 mb-3">Uso interno; no se muestra en el catálogo.</p>
+                        <dl class="space-y-2 text-sm">
+                            @if ($property->rent_commission)
+                                <div class="flex justify-between gap-2">
+                                    <dt class="text-slate-500">Renta</dt>
+                                    <dd class="font-medium text-slate-800">{{ $property->rent_commission_label }}</dd>
+                                </div>
+                            @endif
+                            @if ($property->sale_commission_percent)
+                                <div class="flex justify-between gap-2">
+                                    <dt class="text-slate-500">Venta</dt>
+                                    <dd class="font-medium text-slate-800">{{ rtrim(rtrim($property->sale_commission_percent, '0'), '.') }} %</dd>
+                                </div>
+                            @endif
+                        </dl>
+                    </section>
+                @endif
+            @endcan
 
             <section class="bg-white rounded-xl border border-slate-200 p-4">
                 <h2 class="font-medium text-slate-800 mb-3">Ficha técnica</h2>
@@ -76,7 +130,12 @@
                         'Terreno' => $property->land_area ? (int) $property->land_area.' m²' : null,
                         'Construcción' => $property->built_area ? (int) $property->built_area.' m²' : null,
                         'Niveles' => $property->floors,
+                        'Piso' => $property->floor_number,
+                        'Condición' => $property->condition_label,
+                        'Orientación' => $property->orientation_label,
+                        'Interior/Exterior' => $property->position_label,
                         'Antigüedad' => $property->age_years ? $property->age_years.' años' : null,
+                        'Creada el' => $property->created_at?->translatedFormat('d/m/Y'),
                     ] as $term => $value)
                         @if ($value !== null && $value !== '')
                             <div class="flex justify-between gap-2">

@@ -35,6 +35,12 @@ return [
         ],
     ],
 
+    'nominatim' => [
+        // Nominatim exige identificarse; usa un dominio/correo real del proyecto.
+        'user_agent' => env('NOMINATIM_USER_AGENT', 'Ubiqa/1.0 (contacto@ubiqamx.com)'),
+        'timeout' => (int) env('NOMINATIM_TIMEOUT', 10),
+    ],
+
     'groq' => [
         'api_key' => env('GROQ_API_KEY'),
         'model' => env('GROQ_MODEL', 'openai/gpt-oss-20b'),

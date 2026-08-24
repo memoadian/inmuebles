@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FeatureController;
+use App\Http\Controllers\GeocodingController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PropertyAiExtractionController;
 use App\Http\Controllers\PropertyController;
@@ -23,6 +24,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PublicPropertyController::class, 'index'])->name('home');
 Route::get('/propiedades', [PublicPropertyController::class, 'index'])->name('public.properties.index');
 Route::get('/propiedades/{property:slug}', [PublicPropertyController::class, 'show'])->name('public.properties.show');
+Route::get('/propiedades/{property:slug}/ficha.pdf', [PublicPropertyController::class, 'pdf'])
+    ->middleware('throttle:pdf')
+    ->name('public.properties.pdf');
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +60,14 @@ Route::middleware('auth')->group(function () {
     Route::post('properties-ai-suggest-titles', PropertyTitleSuggestionController::class)
         ->middleware('throttle:ai-groq')
         ->name('properties.ai-suggest-titles');
+
+    // Geocodificación para el mapa del formulario (Nominatim, vía servidor).
+    Route::post('geocoding/search', [GeocodingController::class, 'search'])
+        ->middleware('throttle:geocoding')
+        ->name('geocoding.search');
+    Route::post('geocoding/reverse', [GeocodingController::class, 'reverse'])
+        ->middleware('throttle:geocoding')
+        ->name('geocoding.reverse');
 
     // Imágenes
     Route::post('properties/{property}/images', [PropertyImageController::class, 'store'])

@@ -12,7 +12,7 @@ class FeatureController extends Controller
     public function index()
     {
         return view('features.index', [
-            'features' => Feature::withCount('properties')->orderBy('name')->get(),
+            'features' => Feature::withCount('properties')->ordered()->get(),
         ]);
     }
 
@@ -57,8 +57,13 @@ class FeatureController extends Controller
     {
         return $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('features')->ignore($ignoreId)],
+            'group' => ['required', Rule::in(array_keys(Feature::GROUPS))],
             'icon' => ['nullable', 'string', 'max:50'],
+            'order' => ['nullable', 'integer', 'min:0', 'max:9999'],
             'is_active' => ['nullable', 'boolean'],
-        ]) + ['is_active' => $request->boolean('is_active')];
+        ]) + [
+            'is_active' => $request->boolean('is_active'),
+            'order' => (int) $request->input('order', 0),
+        ];
     }
 }

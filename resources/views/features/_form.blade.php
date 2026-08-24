@@ -9,6 +9,27 @@
         <input id="name" name="name" type="text" required value="{{ old('name', $feature?->name) }}" class="{{ $input }}">
     </div>
 
+    <div class="grid gap-4 sm:grid-cols-2">
+        <div>
+            <label for="group" class="block text-sm font-medium text-slate-700 mb-1">Grupo</label>
+            <select id="group" name="group" required class="{{ $input }}">
+                @foreach (\App\Models\Feature::GROUPS as $value => $text)
+                    <option value="{{ $value }}" @selected(old('group', $feature?->group ?? 'amenidad') === $value)>
+                        {{ $text }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div>
+            <label for="order" class="block text-sm font-medium text-slate-700 mb-1">
+                Orden <span class="text-slate-400 font-normal">(dentro del grupo)</span>
+            </label>
+            <input id="order" name="order" type="number" min="0" value="{{ old('order', $feature?->order ?? 0) }}"
+                   class="{{ $input }}">
+        </div>
+    </div>
+
     <div>
         <label for="icon" class="block text-sm font-medium text-slate-700 mb-1">
             Icono <span class="text-slate-400 font-normal">(nombre de Bootstrap Icons, opcional)</span>

@@ -39,5 +39,20 @@ class AppServiceProvider extends ServiceProvider
                 ], 429);
             });
         });
+
+        // Generar un PDF cuesta CPU y la ruta es pública: se limita por IP.
+        RateLimiter::for('pdf', function ($request) {
+            return Limit::perMinute(20)->by($request->ip());
+        });
+
+        // Nominatim pide máximo ~1 petición por segundo para toda la aplicación,
+        // no por usuario; por eso este bucket también es único y compartido.
+        RateLimiter::for('geocoding', function () {
+            return Limit::perMinute(30)->by('geocoding')->response(function () {
+                return response()->json([
+                    'message' => 'Demasiadas búsquedas de dirección seguidas. Espera un momento.',
+                ], 429);
+            });
+        });
     }
 }

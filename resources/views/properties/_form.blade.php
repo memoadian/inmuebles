@@ -116,7 +116,9 @@
                            value="{{ old('built_area', $property?->built_area) }}" class="{{ $input }}">
                 </div>
                 <div>
-                    <label for="floors" class="{{ $label }}">Niveles</label>
+                    <label for="floors" class="{{ $label }}">
+                        Niveles <span class="text-slate-400 font-normal">(de la propiedad)</span>
+                    </label>
                     <input id="floors" name="floors" type="number" min="0"
                            value="{{ old('floors', $property?->floors) }}" class="{{ $input }}">
                 </div>
@@ -126,22 +128,71 @@
                            value="{{ old('age_years', $property?->age_years) }}" class="{{ $input }}">
                 </div>
             </div>
+
+            <div class="mt-4 grid gap-4 sm:grid-cols-4">
+                <div>
+                    <label for="floor_number" class="{{ $label }}">
+                        Piso <span class="text-slate-400 font-normal">(en el que está)</span>
+                    </label>
+                    <input id="floor_number" name="floor_number" type="number" min="0"
+                           value="{{ old('floor_number', $property?->floor_number) }}" class="{{ $input }}"
+                           placeholder="Depas y oficinas">
+                </div>
+                <div>
+                    <label for="condition" class="{{ $label }}">Condición</label>
+                    <select id="condition" name="condition" class="{{ $input }}">
+                        <option value="">Sin especificar</option>
+                        @foreach (\App\Models\Property::CONDITIONS as $value => $text)
+                            <option value="{{ $value }}" @selected(old('condition', $property?->condition) === $value)>
+                                {{ $text }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label for="orientation" class="{{ $label }}">Orientación</label>
+                    <select id="orientation" name="orientation" class="{{ $input }}">
+                        <option value="">Sin especificar</option>
+                        @foreach (\App\Models\Property::ORIENTATIONS as $value => $text)
+                            <option value="{{ $value }}" @selected(old('orientation', $property?->orientation) === $value)>
+                                {{ $text }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label for="position" class="{{ $label }}">Interior / Exterior</label>
+                    <select id="position" name="position" class="{{ $input }}">
+                        <option value="">Sin especificar</option>
+                        @foreach (\App\Models\Property::POSITIONS as $value => $text)
+                            <option value="{{ $value }}" @selected(old('position', $property?->position) === $value)>
+                                {{ $text }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
         </section>
 
-        {{-- Amenidades --}}
-        <section class="bg-white rounded-xl border border-slate-200 p-4">
-            <h2 class="font-medium text-slate-800 mb-4">Amenidades</h2>
-
-            <div class="grid gap-2 sm:grid-cols-3">
-                @foreach ($features as $feature)
-                    <label class="flex items-center gap-2 text-sm text-slate-700">
-                        <input type="checkbox" name="features[]" value="{{ $feature->id }}"
-                               @checked(in_array($feature->id, old('features', $selectedFeatures)))
-                               class="rounded border-slate-300 text-slate-900 focus:ring-slate-900">
-                        <span>{{ $feature->name }}</span>
-                    </label>
-                @endforeach
-            </div>
+        {{-- Amenidades, recreación y características, agrupadas --}}
+        <section class="bg-white rounded-xl border border-slate-200 p-4 space-y-5">
+            @foreach (\App\Models\Feature::GROUPS as $group => $groupLabel)
+                @if ($features->has($group))
+                    <div>
+                        <h2 class="font-medium text-slate-800 mb-3">{{ $groupLabel }}</h2>
+                        <div class="grid gap-2 sm:grid-cols-3">
+                            @foreach ($features[$group] as $feature)
+                                <label class="flex items-center gap-2 text-sm text-slate-700">
+                                    <input type="checkbox" name="features[]" value="{{ $feature->id }}"
+                                           @checked(in_array($feature->id, old('features', $selectedFeatures)))
+                                           class="rounded border-slate-300 text-slate-900 focus:ring-slate-900">
+                                    <span>{{ $feature->name }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            @endforeach
         </section>
 
         {{-- Ubicación --}}
@@ -191,6 +242,38 @@
                            value="{{ old('longitude', $property?->longitude) }}" class="{{ $input }}">
                 </div>
             </div>
+
+            {{-- Mapa: mueve el pin y las coordenadas de arriba se actualizan solas. --}}
+            <div class="mt-4">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                    <p class="text-sm font-medium text-slate-700">Ubicación en el mapa</p>
+                    <button type="button" id="geocodeBtn" data-url="{{ route('geocoding.search') }}"
+                            data-reverse-url="{{ route('geocoding.reverse') }}"
+                            class="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs hover:bg-slate-50 disabled:opacity-50">
+                        <i class="bi bi-search"></i> Buscar por dirección
+                    </button>
+                </div>
+                <div data-map-wrapper class="relative">
+                    <div id="locationMap"
+                         data-lat="{{ old('latitude', $property?->latitude) }}"
+                         data-lng="{{ old('longitude', $property?->longitude) }}"
+                         data-height="h-80 sm:h-[28rem]"
+                         class="h-80 sm:h-[28rem] w-full rounded-lg border border-slate-300 bg-slate-100 z-0"></div>
+
+                    <button type="button" data-map-expand
+                            aria-label="Ampliar el mapa a pantalla completa"
+                            class="absolute top-2 right-2 z-[500] inline-flex items-center gap-1.5 rounded-lg border
+                                   border-slate-300 bg-white/95 px-2.5 py-1.5 text-xs font-medium text-slate-700
+                                   shadow-sm backdrop-blur hover:bg-white">
+                        <i class="bi bi-arrows-fullscreen" data-map-expand-icon></i>
+                        <span class="hidden sm:inline" data-map-expand-label>Ampliar</span>
+                    </button>
+                </div>
+                <p class="mt-1.5 text-xs text-slate-500">
+                    Arrastra el pin (o haz clic en el mapa) para marcar la ubicación exacta.
+                    <span id="geocodeStatus" class="text-slate-600"></span>
+                </p>
+            </div>
         </section>
     </div>
 
@@ -220,6 +303,61 @@
                     <input id="maintenance_fee" name="maintenance_fee" type="number" step="0.01" min="0"
                            value="{{ old('maintenance_fee', $property?->maintenance_fee) }}" class="{{ $input }}">
                 </div>
+                <div>
+                    <label for="property_tax_estimate" class="{{ $label }}">
+                        Predial anual estimado
+                    </label>
+                    <input id="property_tax_estimate" name="property_tax_estimate" type="number" step="0.01" min="0"
+                           value="{{ old('property_tax_estimate', $property?->property_tax_estimate) }}" class="{{ $input }}">
+                </div>
+                <div>
+                    <label for="services_estimate" class="{{ $label }}">
+                        Servicios mensuales estimados
+                    </label>
+                    <input id="services_estimate" name="services_estimate" type="number" step="0.01" min="0"
+                           value="{{ old('services_estimate', $property?->services_estimate) }}" class="{{ $input }}"
+                           placeholder="Agua, luz, gas…">
+                </div>
+            </div>
+            <p class="mt-3 text-xs text-slate-500">
+                El desglose se muestra al interesado como costo mensual estimado aparte del precio.
+            </p>
+        </section>
+
+        {{-- Datos comerciales: no se publican en el catálogo. --}}
+        <section class="bg-white rounded-xl border border-slate-200 p-4">
+            <h2 class="font-medium text-slate-800 mb-1">Datos comerciales</h2>
+            <p class="text-xs text-slate-500 mb-4">Sólo para el equipo; no aparece en el catálogo público.</p>
+
+            <div class="space-y-4">
+                <label class="flex items-center gap-2 text-sm text-slate-700">
+                    <input type="checkbox" name="is_exclusive" value="1"
+                           @checked(old('is_exclusive', $property?->is_exclusive))
+                           class="rounded border-slate-300 text-slate-900 focus:ring-slate-900">
+                    <span>Propiedad en exclusiva</span>
+                </label>
+
+                @can('properties.view-commission')
+                    <div>
+                        <label for="rent_commission" class="{{ $label }}">Comisión de renta</label>
+                        <select id="rent_commission" name="rent_commission" class="{{ $input }}">
+                            <option value="">Sin especificar</option>
+                            @foreach (\App\Models\Property::RENT_COMMISSIONS as $value => $text)
+                                <option value="{{ $value }}" @selected(old('rent_commission', $property?->rent_commission) === $value)>
+                                    {{ $text }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="sale_commission_percent" class="{{ $label }}">Comisión de venta (%)</label>
+                        <input id="sale_commission_percent" name="sale_commission_percent" type="number"
+                               step="0.25" min="1" max="6"
+                               value="{{ old('sale_commission_percent', $property?->sale_commission_percent) }}"
+                               class="{{ $input }}" placeholder="Del 1 al 6 %">
+                    </div>
+                @endcan
             </div>
         </section>
 

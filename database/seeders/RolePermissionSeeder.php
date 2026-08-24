@@ -12,12 +12,13 @@ class RolePermissionSeeder extends Seeder
     /** group => [name => description] */
     private array $permissions = [
         'properties' => [
-            'properties.view'     => 'Ver el listado de propiedades',
-            'properties.create'   => 'Registrar nuevas propiedades',
-            'properties.edit'     => 'Editar sus propias propiedades',
-            'properties.delete'   => 'Eliminar propiedades',
-            'properties.publish'  => 'Publicar y despublicar propiedades',
-            'properties.edit-any' => 'Editar propiedades de cualquier usuario',
+            'properties.view'            => 'Ver el listado de propiedades',
+            'properties.create'          => 'Registrar nuevas propiedades',
+            'properties.edit'            => 'Editar sus propias propiedades',
+            'properties.delete'          => 'Eliminar propiedades',
+            'properties.publish'         => 'Publicar y despublicar propiedades',
+            'properties.edit-any'        => 'Editar propiedades de cualquier usuario',
+            'properties.view-commission' => 'Ver y capturar las comisiones de la propiedad',
         ],
         'images' => [
             'images.upload'  => 'Subir fotos a una propiedad',
@@ -72,7 +73,7 @@ class RolePermissionSeeder extends Seeder
         );
         $agent->syncPermissions([
             'properties.view', 'properties.create', 'properties.edit',
-            'properties.delete', 'properties.publish',
+            'properties.delete', 'properties.publish', 'properties.view-commission',
             'images.upload', 'images.delete', 'images.reorder',
         ]);
 

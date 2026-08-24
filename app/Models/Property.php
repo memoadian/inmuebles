@@ -15,16 +15,55 @@ class Property extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /** Condición del inmueble (punto 7 del cliente). */
+    public const CONDITIONS = [
+        'nueva' => 'Nueva',
+        'excelente' => 'Excelente',
+        'buena' => 'Buena',
+        'regular' => 'Regular',
+    ];
+
+    /** Orientación (punto 10). Se usan los 8 puntos cardinales. */
+    public const ORIENTATIONS = [
+        'norte' => 'Norte',
+        'sur' => 'Sur',
+        'oriente' => 'Oriente (este)',
+        'poniente' => 'Poniente (oeste)',
+        'noreste' => 'Noreste',
+        'noroeste' => 'Noroeste',
+        'sureste' => 'Sureste',
+        'suroeste' => 'Suroeste',
+    ];
+
+    /** Interior / exterior (punto 11). */
+    public const POSITIONS = [
+        'interior' => 'Interior',
+        'exterior' => 'Exterior',
+    ];
+
+    /** Comisión que otorga el propietario en renta (punto 5). */
+    public const RENT_COMMISSIONS = [
+        'half_month' => 'Medio mes de renta',
+        'one_month' => '1 mes de renta',
+        'two_three_months' => '2 o 3 meses de renta',
+    ];
+
+    /** Campos comerciales: sólo los ve quien tiene properties.view-commission. */
+    public const COMMISSION_FIELDS = ['rent_commission', 'sale_commission_percent'];
+
     protected $fillable = [
         'user_id', 'property_type_id',
         'title', 'slug', 'description',
         'operation', 'price', 'currency', 'maintenance_fee',
+        'property_tax_estimate', 'services_estimate',
         'bedrooms', 'bathrooms', 'half_bathrooms', 'parking_spaces',
-        'land_area', 'built_area', 'floors', 'age_years',
+        'land_area', 'built_area', 'floors', 'floor_number', 'age_years',
+        'condition', 'orientation', 'position',
         'street', 'ext_number', 'int_number', 'postal_code',
         'state_id', 'city_id', 'neighborhood_id',
         'latitude', 'longitude',
         'status', 'published_at', 'is_featured',
+        'is_exclusive', 'rent_commission', 'sale_commission_percent',
     ];
 
     protected function casts(): array
@@ -32,12 +71,16 @@ class Property extends Model
         return [
             'price' => 'decimal:2',
             'maintenance_fee' => 'decimal:2',
+            'property_tax_estimate' => 'decimal:2',
+            'services_estimate' => 'decimal:2',
+            'sale_commission_percent' => 'decimal:2',
             'land_area' => 'decimal:2',
             'built_area' => 'decimal:2',
             'latitude' => 'decimal:7',
             'longitude' => 'decimal:7',
             'published_at' => 'datetime',
             'is_featured' => 'boolean',
+            'is_exclusive' => 'boolean',
         ];
     }
 
@@ -94,6 +137,48 @@ class Property extends Model
     public function isPublished(): bool
     {
         return $this->status === 'published';
+    }
+
+    /** Etiquetas legibles de los campos de catálogo. */
+    public function getConditionLabelAttribute(): ?string
+    {
+        return self::CONDITIONS[$this->condition] ?? null;
+    }
+
+    public function getOrientationLabelAttribute(): ?string
+    {
+        return self::ORIENTATIONS[$this->orientation] ?? null;
+    }
+
+    public function getPositionLabelAttribute(): ?string
+    {
+        return self::POSITIONS[$this->position] ?? null;
+    }
+
+    public function getRentCommissionLabelAttribute(): ?string
+    {
+        return self::RENT_COMMISSIONS[$this->rent_commission] ?? null;
+    }
+
+    /**
+     * Costo mensual estimado aparte del precio: mantenimiento + servicios +
+     * el predial prorrateado (en México se paga anual). Null si no se capturó
+     * ninguno de los tres.
+     */
+    public function getEstimatedMonthlyCostAttribute(): ?float
+    {
+        $parts = [
+            (float) $this->maintenance_fee,
+            (float) $this->services_estimate,
+            (float) $this->property_tax_estimate / 12,
+        ];
+
+        return array_sum($parts) > 0 ? round(array_sum($parts), 2) : null;
+    }
+
+    public function hasCoordinates(): bool
+    {
+        return $this->latitude !== null && $this->longitude !== null;
     }
 
     /** Dirección legible, omitiendo las partes que falten. */

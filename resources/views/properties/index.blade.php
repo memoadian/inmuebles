@@ -70,7 +70,14 @@
                         <p class="mt-1 text-xs text-slate-500">
                             {{ $property->type?->name }}
                             @if ($property->city) &middot; {{ $property->city->name }} @endif
+                            &middot; alta {{ $property->created_at->translatedFormat('d/m/Y') }}
                         </p>
+
+                        @if ($property->is_exclusive)
+                            <span class="mt-2 inline-flex w-fit items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">
+                                <i class="bi bi-star-fill"></i> Exclusiva
+                            </span>
+                        @endif
 
                         <p class="mt-2 text-lg font-semibold text-slate-900">
                             ${{ number_format($property->price, 0) }}

@@ -69,7 +69,10 @@ class PropertyController extends Controller
     {
         $this->authorize('view', $property);
 
-        $property->load(['type', 'state', 'city', 'neighborhood', 'images', 'features', 'user']);
+        $property->load([
+            'type', 'state', 'city', 'neighborhood', 'images', 'user',
+            'features' => fn ($q) => $q->ordered(),
+        ]);
 
         return view('properties.show', compact('property'));
     }
@@ -136,7 +139,7 @@ class PropertyController extends Controller
     {
         return [
             'types' => PropertyType::active()->orderBy('name')->get(),
-            'features' => Feature::active()->orderBy('name')->get(),
+            'features' => Feature::active()->ordered()->get()->groupBy('group'),
             'states' => State::orderBy('name')->get(),
         ];
     }
