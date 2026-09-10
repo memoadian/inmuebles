@@ -7,7 +7,8 @@
 <div class="h-full flex flex-col">
     <div class="h-14 flex items-center px-4 border-b border-slate-200 shrink-0">
         <a href="{{ route('public.properties.index') }}" aria-label="{{ config('app.name', 'Ubiqa') }}">
-            <x-ubiqa-logo class="text-base text-slate-900" />
+            <img src="{{ asset('images/logo-ubiqa-dark.png') }}" alt="{{ config('app.name', 'Ubiqa') }}"
+                 width="520" height="173" class="h-8 w-auto">
         </a>
     </div>
 

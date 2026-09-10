@@ -13,7 +13,8 @@
     <div class="min-h-screen flex items-center justify-center px-4 py-12">
         <div class="w-full max-w-md">
             <div class="text-center mb-6">
-                <x-ubiqa-logo class="text-2xl text-slate-900" />
+                <img src="{{ asset('images/logo-ubiqa-dark.png') }}" alt="{{ config('app.name', 'Ubiqa') }}"
+                     width="520" height="173" class="mx-auto h-10 w-auto">
                 <p class="mt-2 text-sm text-slate-500">Ingresa a tu cuenta para continuar</p>
             </div>
 

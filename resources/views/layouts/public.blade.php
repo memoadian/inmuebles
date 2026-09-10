@@ -27,7 +27,8 @@
     <header class="sticky top-0 z-40 border-b border-white/10 bg-brand-950/85 text-white backdrop-blur">
         <div class="mx-auto max-w-7xl px-4 h-18 flex items-center justify-between py-3">
             <a href="{{ route('public.properties.index') }}" aria-label="{{ config('app.name', 'Ubiqa') }} — inicio">
-                <x-ubiqa-logo class="text-lg text-white" />
+                <img src="{{ asset('images/logo-ubiqa-horizontal.png') }}" alt="{{ config('app.name', 'Ubiqa') }}"
+                     width="520" height="173" class="h-9 w-auto">
             </a>
 
             <nav class="flex items-center gap-1.5 text-sm">
