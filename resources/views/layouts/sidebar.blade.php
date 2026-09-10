@@ -5,9 +5,10 @@
 @endphp
 
 <div class="h-full flex flex-col">
-    <div class="h-14 flex items-center gap-2 px-4 border-b border-slate-200 shrink-0">
-        <i class="bi bi-houses-fill text-xl text-slate-900"></i>
-        <span class="font-semibold text-slate-900">{{ config('app.name', 'Inmuebles') }}</span>
+    <div class="h-14 flex items-center px-4 border-b border-slate-200 shrink-0">
+        <a href="{{ route('public.properties.index') }}" aria-label="{{ config('app.name', 'Ubiqa') }}">
+            <x-ubiqa-logo class="text-base text-slate-900" />
+        </a>
     </div>
 
     <nav class="flex-1 overflow-y-auto p-3 space-y-1">

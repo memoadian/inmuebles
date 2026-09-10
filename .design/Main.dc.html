@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+    body { margin: 0; background: #0e1e19; font-family: 'Space Grotesk', system-ui, sans-serif; color: #f5f5f4; }
+    a { color: #dd7e5c; } a:hover { color: #c85f3d; }
+    .ph { background: linear-gradient(140deg, #2a3f38, #14261f); }
+  </style>
+</helmet>
+
+<div style="width: 1200px; height: 900px; overflow: hidden; display: flex; flex-direction: column;">
+
+  <div style="height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 36px; border-bottom: 1px solid rgba(255,255,255,.08);">
+    <div style="display: flex; align-items: center; gap: 28px;">
+      <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 25px; letter-spacing: -.3px;">Ubiqa</span>
+      <div style="display: flex; gap: 20px; font-size: 13px; color: rgba(245,245,244,.6);">
+        <span>Comprar</span><span>Rentar</span><span>Vender con nosotros</span>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 14px; font-size: 13px;">
+      <span style="color: rgba(245,245,244,.6);">Guardados</span>
+      <span style="border: 1px solid rgba(255,255,255,.25); border-radius: 999px; padding: 7px 15px;">Entrar</span>
+    </div>
+  </div>
+
+  <div style="padding: 40px 36px 26px;">
+    <h1 style="font-family: 'Instrument Serif', Georgia, serif; font-size: 62px; line-height: .98; margin: 0; letter-spacing: -1.5px; max-width: 640px;">
+      Cada casa que ves<br>sigue disponible<span style="color: {{accent}};">.</span>
+    </h1>
+    <p style="margin: 14px 0 0; font-size: 15px; color: rgba(245,245,244,.62); max-width: 430px;">Inventario confirmado cada 30 días. Sin anuncios fantasma, sin llamadas de spam.</p>
+
+    <div style="margin-top: 26px; display: flex; gap: 10px; align-items: center; background: #fafaf9; border-radius: 999px; padding: 7px 7px 7px 10px; max-width: 780px;">
+      <div style="display: flex; background: #eceae7; border-radius: 999px; padding: 3px;">
+        <span style="background: #fff; border-radius: 999px; padding: 7px 16px; font-size: 13px; font-weight: 600; color: #1c1917; box-shadow: 0 1px 2px rgba(0,0,0,.08);">Venta</span>
+        <span style="padding: 7px 16px; font-size: 13px; color: #78716c;">Renta</span>
+      </div>
+      <span style="flex-grow: 1; font-size: 14px; color: #a8a29e; padding-left: 6px;">Colonia, ciudad o código postal…</span>
+      <span style="background: {{accent}}; color: #fff; border-radius: 999px; padding: 11px 26px; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 7px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        Buscar
+      </span>
+    </div>
+
+    <div style="margin-top: 14px; display: flex; gap: 8px; align-items: center;">
+      <sc-for list="{{chips}}" as="chip" hint-placeholder-count="4">
+        <span style="border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 6px 14px; font-size: 12.5px; color: rgba(245,245,244,.8);">{{chip}}</span>
+      </sc-for>
+      <span style="margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: rgba(245,245,244,.55);">
+        <span style="width: 34px; height: 19px; border-radius: 999px; background: {{accent}}; position: relative; display: inline-block;"><span style="position: absolute; right: 2px; top: 2px; width: 15px; height: 15px; border-radius: 999px; background: #fff;"></span></span>
+        Ver en mapa
+      </span>
+    </div>
+  </div>
+
+  <div style="flex-grow: 1; background: #fafaf9; border-radius: 26px 26px 0 0; padding: 24px 36px 0; color: #1c1917;">
+    <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16px;">
+      <p style="margin: 0; font-size: 13px; color: #78716c;"><b style="color: #1c1917; font-weight: 600;">128 inmuebles</b> en Ciudad de México</p>
+      <p style="margin: 0; font-size: 13px; color: #78716c;">Ordenar por: <b style="color: #1c1917; font-weight: 600;">Más recientes</b></p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px;">
+      <sc-for list="{{cards}}" as="c" hint-placeholder-count="3">
+        <div style="background: #fff; border-radius: 18px; overflow: hidden; border: 1px solid #e7e5e4; box-shadow: {{c.shadow}};">
+          <div class="ph" style="height: 178px; position: relative; display: flex; align-items: flex-end; padding: 12px;">
+            <span style="position: absolute; top: 12px; left: 12px; background: rgba(250,250,249,.94); border-radius: 999px; padding: 4px 11px; font-size: 11px; font-weight: 600; color: #14261f;">{{c.tag}}</span>
+            <span style="position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; border-radius: 999px; background: rgba(250,250,249,.94); display: flex; align-items: center; justify-content: center;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="{{c.heartFill}}" stroke="{{c.heartStroke}}" stroke-width="1.8"><path d="M12 20s-7-4.6-7-9.3A4 4 0 0 1 12 8a4 4 0 0 1 7 2.7C19 15.4 12 20 12 20Z"/></svg>
+            </span>
+            <span style="background: rgba(14,30,25,.7); color: #fff; border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 500;">{{c.badge}}</span>
+          </div>
+          <div style="padding: 14px 16px 16px;">
+            <div style="display: flex; align-items: baseline; gap: 7px;">
+              <p style="margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -.5px;">{{c.price}}</p>
+              <span style="font-size: 12px; color: #78716c;">{{c.unit}}</span>
+            </div>
+            <h3 style="margin: 5px 0 0; font-size: 14.5px; font-weight: 500; color: #292524;">{{c.title}}</h3>
+            <div style="margin-top: 11px; padding-top: 11px; border-top: 1px solid #f0efed; display: flex; gap: 16px; font-size: 12.5px; color: #57534e;">
+              <span>{{c.rec}} rec</span><span>{{c.ban}} baños</span><span>{{c.m2}} m²</span>
+            </div>
+            <sc-if value="{{c.hover}}" hint-placeholder-val="{{true}}">
+              <div style="margin-top: 12px; display: flex; gap: 8px;">
+                <span style="flex-grow: 1; text-align: center; background: #14261f; color: #fff; border-radius: 10px; padding: 9px; font-size: 13px; font-weight: 600;">Ver ficha</span>
+                <span style="border: 1px solid #d6d3d1; border-radius: 10px; padding: 9px 13px; font-size: 13px; color: #44403c;">Comparar</span>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top: 20px; background: #14261f; border-radius: 14px; padding: 12px 18px; display: flex; align-items: center; gap: 14px; color: #fff;">
+      <span style="font-size: 13px; font-weight: 600;">2 inmuebles para comparar</span>
+      <div style="display: flex; gap: 6px;">
+        <span style="width: 34px; height: 26px; border-radius: 6px; background: rgba(255,255,255,.16);"></span>
+        <span style="width: 34px; height: 26px; border-radius: 6px; background: rgba(255,255,255,.16);"></span>
+      </div>
+      <span style="margin-left: auto; background: {{accent}}; border-radius: 999px; padding: 8px 18px; font-size: 13px; font-weight: 600;">Comparar lado a lado</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":1200,"height":900},"accent":{"editor":"color","default":"#dd7e5c","options":["#dd7e5c","#e8b53f","#5f9a80","#7c6cf0"],"section":"Tema"}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#dd7e5c';
+    return {
+      accent,
+      chips: ['3+ recámaras', 'Hasta $6M', 'Con alberca', 'Disponible hoy'],
+      cards: [
+        { tag: 'Venta', badge: 'Verificada hace 3 días', price: '$5.2M', unit: 'MXN', title: 'Casa en Coyoacán con jardín y estudio', rec: 3, ban: 2, m2: 180, hover: true, shadow: '0 18px 30px -12px rgba(14,30,25,.28)', heartFill: accent, heartStroke: accent },
+        { tag: 'Renta', badge: 'Disponible hoy', price: '$18,500', unit: '/ mes', title: 'Departamento en Del Valle, piso 7', rec: 2, ban: 1, m2: 74, hover: false, shadow: 'none', heartFill: 'none', heartStroke: '#57534e' },
+        { tag: 'Venta', badge: 'Exclusiva', price: '$7.9M', unit: 'MXN', title: 'Casa en fraccionamiento privado', rec: 4, ban: 3, m2: 260, hover: false, shadow: 'none', heartFill: 'none', heartStroke: '#57534e' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

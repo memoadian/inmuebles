@@ -15,37 +15,37 @@
 
     <a href="https://wa.me/?text={{ rawurlencode($message) }}" target="_blank" rel="noopener"
        aria-label="Compartir por WhatsApp" title="WhatsApp"
-       class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-stone-300 text-stone-600
-              hover:bg-stone-50 hover:text-brand-700 transition-colors">
+       class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-300 text-slate-600
+              hover:bg-slate-50 hover:text-brand-700 transition-colors">
         <i class="bi bi-whatsapp"></i>
     </a>
 
     <a href="https://www.facebook.com/sharer/sharer.php?u={{ rawurlencode($url) }}" target="_blank" rel="noopener"
        aria-label="Compartir en Facebook" title="Facebook"
-       class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-stone-300 text-stone-600
-              hover:bg-stone-50 hover:text-brand-700 transition-colors">
+       class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-300 text-slate-600
+              hover:bg-slate-50 hover:text-brand-700 transition-colors">
         <i class="bi bi-facebook"></i>
     </a>
 
     <a href="https://twitter.com/intent/tweet?text={{ rawurlencode($title) }}&url={{ rawurlencode($url) }}"
        target="_blank" rel="noopener" aria-label="Compartir en X" title="X"
-       class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-stone-300 text-stone-600
-              hover:bg-stone-50 hover:text-brand-700 transition-colors">
+       class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-300 text-slate-600
+              hover:bg-slate-50 hover:text-brand-700 transition-colors">
         <i class="bi bi-twitter-x"></i>
     </a>
 
     <a href="mailto:?subject={{ rawurlencode($title) }}&body={{ rawurlencode($message) }}"
        aria-label="Compartir por correo" title="Correo"
-       class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-stone-300 text-stone-600
-              hover:bg-stone-50 hover:text-brand-700 transition-colors">
+       class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-300 text-slate-600
+              hover:bg-slate-50 hover:text-brand-700 transition-colors">
         <i class="bi bi-envelope"></i>
     </a>
 
     <button type="button" data-share-copy aria-label="Copiar enlace" title="Copiar enlace"
-            class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-stone-300 text-stone-600
-                   hover:bg-stone-50 hover:text-brand-700 transition-colors">
+            class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-300 text-slate-600
+                   hover:bg-slate-50 hover:text-brand-700 transition-colors">
         <i class="bi bi-link-45deg" data-share-copy-icon></i>
     </button>
 
-    <span data-share-status class="text-xs text-stone-500 empty:hidden" role="status" aria-live="polite"></span>
+    <span data-share-status class="text-xs text-slate-500 empty:hidden" role="status" aria-live="polite"></span>
 </div>

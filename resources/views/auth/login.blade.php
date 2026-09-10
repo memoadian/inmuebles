@@ -13,9 +13,8 @@
     <div class="min-h-screen flex items-center justify-center px-4 py-12">
         <div class="w-full max-w-md">
             <div class="text-center mb-6">
-                <i class="bi bi-houses-fill text-4xl text-slate-900"></i>
-                <h1 class="mt-2 text-2xl font-semibold text-slate-900">{{ config('app.name', 'Inmuebles') }}</h1>
-                <p class="text-sm text-slate-500">Ingresa a tu cuenta para continuar</p>
+                <x-ubiqa-logo class="text-2xl text-slate-900" />
+                <p class="mt-2 text-sm text-slate-500">Ingresa a tu cuenta para continuar</p>
             </div>
 
             <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">

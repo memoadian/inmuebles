@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&family=DM+Sans:wght@400;500;700&display=swap');
+    body { margin: 0; background: #f6f1e9; font-family: 'DM Sans', system-ui, sans-serif; color: #2b2621; }
+    a { color: #9a4a2c; } a:hover { color: #7a3820; }
+    .ph { background: linear-gradient(150deg, #ded2c2, #c9b9a4); display: flex; align-items: center; justify-content: center; }
+  </style>
+</helmet>
+
+<div style="width: 1200px; height: 900px; overflow: hidden;">
+
+  <div style="height: 76px; display: flex; align-items: center; justify-content: space-between; padding: 0 52px;">
+    <span style="font-family: 'Newsreader', Georgia, serif; font-size: 27px; font-weight: 400; letter-spacing: .4px;">Ubiqa</span>
+    <div style="display: flex; align-items: center; gap: 26px; font-size: 13.5px; color: #6b6055;">
+      <span>Casas</span><span>Departamentos</span><span>Terrenos</span>
+      <span style="border-bottom: 1px solid #9a4a2c; color: #9a4a2c; padding-bottom: 2px;">Publica la tuya</span>
+    </div>
+  </div>
+
+  <div style="padding: 12px 52px 0; display: flex; gap: 44px; align-items: flex-start;">
+    <div style="width: 380px; padding-top: 30px;">
+      <p style="margin: 0 0 14px; font-size: 12px; letter-spacing: 2.4px; text-transform: uppercase; color: #9a4a2c;">Ciudad de México</p>
+      <h1 style="font-family: 'Newsreader', Georgia, serif; font-size: 52px; font-weight: 300; line-height: 1.04; margin: 0; letter-spacing: -.8px;">
+        Un lugar<br><em style="font-style: italic;">que se siente</em><br>tuyo desde<br>la primera visita
+      </h1>
+      <p style="margin: 20px 0 0; font-size: 14.5px; line-height: 1.65; color: #6b6055; max-width: 310px;">
+        Cada inmueble lo visita un asesor antes de publicarse. Lo que ves en las fotos es lo que vas a encontrar.
+      </p>
+
+      <div style="margin-top: 26px; background: #fffdf9; border: 1px solid #e3d8c8; border-radius: 4px; padding: 18px;">
+        <div style="display: flex; gap: 0; border-bottom: 1px solid #e3d8c8; padding-bottom: 12px;">
+          <span style="font-size: 13px; font-weight: 700; border-bottom: 2px solid #9a4a2c; padding-bottom: 12px; margin-bottom: -13px;">Comprar</span>
+          <span style="font-size: 13px; color: #8a7d70; margin-left: 22px;">Rentar</span>
+        </div>
+        <p style="margin: 14px 0 4px; font-size: 11.5px; letter-spacing: 1.4px; text-transform: uppercase; color: #8a7d70;">Zona</p>
+        <p style="margin: 0 0 14px; font-size: 15px; font-family: 'Newsreader', Georgia, serif;">Coyoacán, Del Valle…</p>
+        <p style="margin: 0 0 4px; font-size: 11.5px; letter-spacing: 1.4px; text-transform: uppercase; color: #8a7d70;">Presupuesto</p>
+        <p style="margin: 0 0 16px; font-size: 15px; font-family: 'Newsreader', Georgia, serif;">Hasta $6,000,000</p>
+        <span style="display: block; text-align: center; background: #2b2621; color: #f6f1e9; padding: 13px; font-size: 13px; letter-spacing: .6px;">VER 128 INMUEBLES</span>
+      </div>
+    </div>
+
+    <div style="flex-grow: 1;">
+      <div class="ph" style="height: 342px; border-radius: 3px; position: relative;">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#a8977f" stroke-width="1.2"><rect x="3" y="4" width="18" height="16" rx="1"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m4 17 5-5 4 4 3-2 4 4"/></svg>
+        <div style="position: absolute; left: 0; bottom: 0; right: 0; padding: 22px 24px; background: linear-gradient(transparent, rgba(43,38,33,.72));">
+          <p style="margin: 0; font-family: 'Newsreader', Georgia, serif; font-size: 28px; color: #fdfaf5; font-weight: 400;">$5,200,000</p>
+          <p style="margin: 3px 0 0; font-size: 13.5px; color: rgba(253,250,245,.82);">Casa en Coyoacán con jardín y estudio · 3 rec · 180 m²</p>
+        </div>
+        <span style="position: absolute; top: 18px; right: 18px; width: 36px; height: 36px; border-radius: 999px; background: rgba(253,250,245,.9); display: flex; align-items: center; justify-content: center;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#2b2621" stroke-width="1.6"><path d="M12 20s-7-4.6-7-9.3A4 4 0 0 1 12 8a4 4 0 0 1 7 2.7C19 15.4 12 20 12 20Z"/></svg>
+        </span>
+        <span style="position: absolute; top: 18px; left: 18px; background: rgba(253,250,245,.9); padding: 5px 12px; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase;">Visitada por un asesor</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 20px;">
+        <sc-for list="{{cards}}" as="c" hint-placeholder-count="2">
+          <div>
+            <div class="ph" style="height: 190px; border-radius: 3px; position: relative;">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#a8977f" stroke-width="1.2"><rect x="3" y="4" width="18" height="16" rx="1"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m4 17 5-5 4 4 3-2 4 4"/></svg>
+              <span style="position: absolute; top: 14px; left: 14px; background: rgba(253,250,245,.9); padding: 4px 10px; font-size: 10.5px; letter-spacing: 1.1px; text-transform: uppercase;">{{c.tag}}</span>
+            </div>
+            <p style="margin: 12px 0 0; font-family: 'Newsreader', Georgia, serif; font-size: 22px;">{{c.price}}</p>
+            <p style="margin: 3px 0 0; font-size: 14px; color: #4a423a;">{{c.title}}</p>
+            <p style="margin: 5px 0 0; font-size: 12.5px; color: #8a7d70; letter-spacing: .3px;">{{c.meta}}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":1200,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      cards: [
+        { tag: 'Renta', price: '$18,500 / mes', title: 'Departamento en Del Valle, piso 7', meta: '2 REC · 1 BAÑO · 74 M² · EXTERIOR' },
+        { tag: 'Venta', price: '$7,900,000', title: 'Casa en fraccionamiento privado', meta: '4 REC · 3 BAÑOS · 260 M² · ALBERCA' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

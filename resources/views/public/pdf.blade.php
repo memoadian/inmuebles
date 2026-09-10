@@ -26,13 +26,13 @@
 <style>
     @page { margin: 28px 32px; }
     body { font-family: 'DejaVu Sans', sans-serif; font-size: 10px; color: #1c1917; }
-    h1 { font-size: 17px; margin: 0 0 3px; color: #0e1e19; }
-    h2 { font-size: 11px; margin: 0 0 6px; color: #275342; text-transform: uppercase; letter-spacing: .5px; }
+    h1 { font-size: 17px; margin: 0 0 3px; color: #0b1440; }
+    h2 { font-size: 11px; margin: 0 0 6px; color: #1b3ac4; text-transform: uppercase; letter-spacing: .5px; }
     p { margin: 0 0 6px; line-height: 1.5; }
     .muted { color: #78716c; }
-    .brand { color: #275342; }
-    .header { border-bottom: 2px solid #275342; padding-bottom: 8px; margin-bottom: 12px; }
-    .price { font-size: 20px; font-weight: bold; color: #275342; }
+    .brand { color: #1b3ac4; }
+    .header { border-bottom: 2px solid #1b3ac4; padding-bottom: 8px; margin-bottom: 12px; }
+    .price { font-size: 20px; font-weight: bold; color: #1b3ac4; }
     .block { margin-bottom: 14px; }
     .cover { width: 100%; height: auto; border: 1px solid #e7e5e4; }
     table { width: 100%; border-collapse: collapse; }

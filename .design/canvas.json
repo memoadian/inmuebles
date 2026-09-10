@@ -1,0 +1,16 @@
+{
+  "artboards": [
+    { "file": "Hoy.dc.html", "x": 0, "y": 0, "w": 1200, "h": 900, "title": "Hoy — catálogo actual" },
+    { "file": "Main.dc.html", "x": 1400, "y": 0, "w": 1200, "h": 900, "title": "A · Editorial oscuro" },
+    { "file": "DireccionB.dc.html", "x": 0, "y": 1100, "w": 1200, "h": 900, "title": "B · Mapa primero" },
+    { "file": "DireccionC.dc.html", "x": 1400, "y": 1100, "w": 1200, "h": 900, "title": "C · Boutique cálido" }
+  ],
+  "annotations": [
+    { "id": "diag", "x": -420, "y": 0, "w": 360, "text": "DIAGNÓSTICO DEL DISEÑO ACTUAL\n\n1. El hero ocupa 380 px y empuja los resultados abajo del pliegue. El catálogo es el producto; hoy lo primero que se ve es un eslogan.\n\n2. Los 7 filtros pesan igual. Operación y zona deciden casi toda la búsqueda, pero compiten con 'precio mínimo'.\n\n3. La tarjeta no ayuda a decidir: recámaras y m² van en gris de 13 px hasta abajo.\n\n4. Cero interacción. No hay favoritos, comparar, mapa en resultados ni estados de carga; el hover sólo levanta la tarjeta.\n\n5. Inter + Fraunces es la tipografía por defecto de plantilla: correcta, sin voz.\n\n6. El terracota casi no se usa, así que todo lee verde-gris y nada es punto focal." },
+    { "id": "nota-a", "x": 1400, "y": -190, "w": 380, "text": "A · EDITORIAL OSCURO — candidato principal\n\nPunch por contraste y tipografía, no por decoración. El titular vende lo único que la competencia no tiene: inventario confirmado.\n\nInteracción: toggle venta/renta en la barra, chips de filtro rápido, favorito, tarjeta con acciones al hover y barra de comparación.\n\nTradeoff: el oscuro exige fotos buenas. Con fotos flojas se nota más que en un fondo claro." },
+    { "id": "nota-b", "x": -420, "y": 1100, "w": 360, "text": "B · MAPA PRIMERO — el más usable\n\nSin hero. Filtros arriba, lista y mapa lado a lado, pines con precio, 'buscar en esta zona' y el gancho de 'a 20 min de…'.\n\nEs como trabajan Inmuebles24 y Zillow porque funciona: se ve más inventario por pantalla y la zona se entiende sola.\n\nTradeoff: casi no tiene personalidad de marca. Compite en el terreno donde ellos ya son fuertes." },
+    { "id": "nota-c", "x": 2620, "y": 1100, "w": 360, "text": "C · BOUTIQUE CÁLIDO — el más distinto\n\nPaleta arena, serif editorial, mucho aire, una pieza destacada grande. Vende cuidado y curaduría, no volumen.\n\nTradeoff: muestra 3 inmuebles por pantalla en vez de 9. Funciona con inventario selecto; con 5,000 propiedades se vuelve lento de recorrer." },
+    { "id": "mixto", "x": 2620, "y": 0, "w": 360, "text": "SE PUEDEN MEZCLAR\n\nLo más probable es que quieras la portada y la voz de A con la pantalla de resultados de B. Dime qué te late de cada una y armo la definitiva sobre esa base." }
+  ],
+  "launch": { "view": "canvas" }
+}

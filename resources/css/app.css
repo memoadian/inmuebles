@@ -10,28 +10,28 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
     --font-serif: 'Fraunces', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
 
-    /* Brand — deep emerald, used for primary actions, links and accents */
-    --color-brand-50: #f1f7f4;
-    --color-brand-100: #dcebe2;
-    --color-brand-200: #b9d7c8;
-    --color-brand-300: #8dbba6;
-    --color-brand-400: #5f9a80;
-    --color-brand-500: #3f7d63;
-    --color-brand-600: #2f6650;
-    --color-brand-700: #275342;
-    --color-brand-800: #204236;
-    --color-brand-900: #1a352c;
-    --color-brand-950: #0e1e19;
+    /* Brand — electric blue, taken from the Ubiqa mark; primary actions, links and accents */
+    --color-brand-50: #eef3ff;
+    --color-brand-100: #d9e4ff;
+    --color-brand-200: #b6ccff;
+    --color-brand-300: #86a8ff;
+    --color-brand-400: #527fff;
+    --color-brand-500: #2c5cf6;
+    --color-brand-600: #1c46e5;
+    --color-brand-700: #1b3ac4;
+    --color-brand-800: #1c339b;
+    --color-brand-900: #1b2d78;
+    --color-brand-950: #0b1440;
 
-    /* Accent — warm terracotta, used sparingly for highlights and badges */
-    --color-accent-50: #fdf4f1;
-    --color-accent-100: #fbe6de;
-    --color-accent-200: #f5c8b6;
-    --color-accent-300: #eba489;
-    --color-accent-400: #dd7e5c;
-    --color-accent-500: #c85f3d;
-    --color-accent-600: #a8482c;
-    --color-accent-700: #833823;
-    --color-accent-800: #602a1a;
-    --color-accent-900: #3f1c12;
+    /* Accent — cyan/turquoise from the top of the mark; highlights, badges and glows */
+    --color-accent-50: #ecfdfb;
+    --color-accent-100: #cef9f3;
+    --color-accent-200: #a0f0e8;
+    --color-accent-300: #63e1d8;
+    --color-accent-400: #2cc9c2;
+    --color-accent-500: #12a8a3;
+    --color-accent-600: #0b8583;
+    --color-accent-700: #0d6a69;
+    --color-accent-800: #105453;
+    --color-accent-900: #123f3f;
 }

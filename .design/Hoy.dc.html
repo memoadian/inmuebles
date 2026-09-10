@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap');
+    body { margin: 0; background: #fafaf9; font-family: 'Inter', system-ui, sans-serif; color: #1c1917; }
+    a { color: #275342; } a:hover { color: #204236; }
+    .ph { background: linear-gradient(135deg, #e7e5e4, #d6d3d1); display: flex; align-items: center; justify-content: center; }
+  </style>
+</helmet>
+
+<div style="width: 1200px; height: 900px; overflow: hidden;">
+
+  <div style="height: 72px; border-bottom: 1px solid #e7e5e4; background: #fafaf9; display: flex; align-items: center; justify-content: space-between; padding: 0 40px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="width: 36px; height: 36px; border-radius: 8px; background: #275342; display: flex; align-items: center; justify-content: center;">
+        <svg width="18" height="18" viewBox="0 0 32 32" fill="#fff"><path d="M16 5.5 28.5 16.5h-4v10h-17v-10h-4z"/></svg>
+      </div>
+      <span style="font-family: 'Fraunces', Georgia, serif; font-size: 20px; font-weight: 600; color: #1a352c;">Ubiqa</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+      <span style="color: #57534e;">Publicar</span>
+      <span style="background: #275342; color: #fff; border-radius: 999px; padding: 8px 16px; font-weight: 500;">Mi panel</span>
+    </div>
+  </div>
+
+  <div style="background: linear-gradient(135deg, #0e1e19, #1a352c 55%, #275342); padding: 56px 40px 96px; text-align: center;">
+    <span style="display: inline-block; border-radius: 999px; background: rgba(255,255,255,.1); padding: 5px 12px; font-size: 12px; font-weight: 500; color: #dcebe2;">Publicado directamente por dueños y agentes</span>
+    <h1 style="font-family: 'Fraunces', Georgia, serif; font-size: 46px; font-weight: 600; color: #fff; margin: 18px 0 14px; letter-spacing: -.5px;">Encuentra el inmueble ideal para ti</h1>
+    <p style="color: rgba(220,235,226,.9); font-size: 17px; margin: 0 auto; max-width: 520px;">Casas, departamentos y terrenos en venta o renta, en las zonas donde quieres vivir.</p>
+  </div>
+
+  <div style="padding: 0 40px;">
+    <div style="margin-top: -56px; background: #fff; border: 1px solid #e7e5e4; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(14,30,25,.1); padding: 20px;">
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;">
+        <div style="grid-column: span 2; border: 1px solid #d6d3d1; border-radius: 12px; padding: 11px 14px; font-size: 14px; color: #a8a29e;">¿Qué estás buscando?</div>
+        <div style="border: 1px solid #d6d3d1; border-radius: 12px; padding: 11px 14px; font-size: 14px; color: #57534e;">Todos los tipos</div>
+        <div style="border: 1px solid #d6d3d1; border-radius: 12px; padding: 11px 14px; font-size: 14px; color: #57534e;">Venta y renta</div>
+        <div style="border: 1px solid #d6d3d1; border-radius: 12px; padding: 11px 14px; font-size: 14px; color: #57534e;">Todo el país</div>
+        <div style="border: 1px solid #d6d3d1; border-radius: 12px; padding: 11px 14px; font-size: 14px; color: #a8a29e;">Precio mínimo</div>
+        <div style="border: 1px solid #d6d3d1; border-radius: 12px; padding: 11px 14px; font-size: 14px; color: #a8a29e;">Precio máximo</div>
+        <div style="border: 1px solid #d6d3d1; border-radius: 12px; padding: 11px 14px; font-size: 14px; color: #57534e;">Recámaras</div>
+      </div>
+      <div style="margin-top: 14px; display: flex; align-items: center; gap: 16px;">
+        <span style="background: #275342; color: #fff; border-radius: 12px; padding: 10px 20px; font-size: 14px; font-weight: 500;">Buscar</span>
+        <span style="font-size: 13px; color: #78716c;">Amenidades y características</span>
+        <span style="margin-left: auto; font-size: 13px; color: #78716c;">128 resultados</span>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 36px;">
+      <sc-for list="{{cards}}" as="c" hint-placeholder-count="3">
+        <div style="background: #fff; border: 1px solid #e7e5e4; border-radius: 16px; overflow: hidden;">
+          <div class="ph" style="aspect-ratio: 4/3; position: relative;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#a8a29e" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m4 17 5-5 4 4 3-2 4 4"/></svg>
+            <span style="position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,.95); border-radius: 999px; padding: 4px 10px; font-size: 11px; font-weight: 500; color: #204236;">Venta</span>
+          </div>
+          <div style="padding: 16px;">
+            <p style="font-family: 'Fraunces', Georgia, serif; font-size: 20px; font-weight: 600; color: #1a352c; margin: 0;">{{c.price}}</p>
+            <h3 style="font-size: 15px; font-weight: 500; color: #292524; margin: 4px 0 0;">{{c.title}}</h3>
+            <p style="font-size: 13px; color: #78716c; margin: 6px 0 0;">{{c.meta}}</p>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"$preview":{"width":1200,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      cards: [
+        { price: '$5,200,000', title: 'Casa en Coyoacán con jardín', meta: '3 rec · 2 baños · 180 m²' },
+        { price: '$18,500', title: 'Departamento en Del Valle', meta: '2 rec · 1 baño · 74 m²' },
+        { price: '$7,900,000', title: 'Casa en fraccionamiento privado', meta: '4 rec · 3 baños · 260 m²' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

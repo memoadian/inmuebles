@@ -37,13 +37,13 @@
 
     <div class="mx-auto max-w-7xl px-4">
         <form method="GET" action="{{ route('public.properties.index') }}"
-              class="relative -mt-14 md:-mt-16 bg-white rounded-2xl border border-stone-200 shadow-xl shadow-brand-950/10 p-4 md:p-5">
+              class="relative -mt-14 md:-mt-16 bg-white rounded-2xl border border-slate-200 shadow-xl shadow-brand-950/10 p-4 md:p-5">
             <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <input type="text" name="q" value="{{ request('q') }}" placeholder="¿Qué estás buscando?"
-                       class="rounded-xl border border-stone-300 px-3.5 py-2.5 text-sm lg:col-span-2
+                       class="rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm lg:col-span-2
                               focus:border-brand-600 focus:ring-2 focus:ring-brand-600/15 outline-none transition-shadow">
 
-                <select name="type" class="rounded-xl border border-stone-300 px-3.5 py-2.5 text-sm text-stone-700
+                <select name="type" class="rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-700
                                             focus:border-brand-600 focus:ring-2 focus:ring-brand-600/15 outline-none">
                     <option value="">Todos los tipos</option>
                     @foreach ($types as $type)
@@ -51,14 +51,14 @@
                     @endforeach
                 </select>
 
-                <select name="operation" class="rounded-xl border border-stone-300 px-3.5 py-2.5 text-sm text-stone-700
+                <select name="operation" class="rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-700
                                                  focus:border-brand-600 focus:ring-2 focus:ring-brand-600/15 outline-none">
                     <option value="">Venta y renta</option>
                     <option value="sale" @selected(request('operation') === 'sale')>Venta</option>
                     <option value="rent" @selected(request('operation') === 'rent')>Renta</option>
                 </select>
 
-                <select name="state" class="rounded-xl border border-stone-300 px-3.5 py-2.5 text-sm text-stone-700
+                <select name="state" class="rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-700
                                              focus:border-brand-600 focus:ring-2 focus:ring-brand-600/15 outline-none">
                     <option value="">Todo el país</option>
                     @foreach ($states as $state)
@@ -67,13 +67,13 @@
                 </select>
 
                 <input type="number" name="min_price" value="{{ request('min_price') }}" placeholder="Precio mínimo"
-                       class="rounded-xl border border-stone-300 px-3.5 py-2.5 text-sm
+                       class="rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm
                               focus:border-brand-600 focus:ring-2 focus:ring-brand-600/15 outline-none">
                 <input type="number" name="max_price" value="{{ request('max_price') }}" placeholder="Precio máximo"
-                       class="rounded-xl border border-stone-300 px-3.5 py-2.5 text-sm
+                       class="rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm
                               focus:border-brand-600 focus:ring-2 focus:ring-brand-600/15 outline-none">
 
-                <select name="bedrooms" class="rounded-xl border border-stone-300 px-3.5 py-2.5 text-sm text-stone-700
+                <select name="bedrooms" class="rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-700
                                                 focus:border-brand-600 focus:ring-2 focus:ring-brand-600/15 outline-none">
                     <option value="">Recámaras</option>
                     @foreach ([1, 2, 3, 4] as $n)
@@ -85,7 +85,7 @@
             @php $selectedFeatures = array_map('intval', (array) request('features', [])); @endphp
 
             <details class="mt-3 group" @if ($selectedFeatures) open @endif>
-                <summary class="inline-flex cursor-pointer list-none items-center gap-1.5 text-sm text-stone-600 hover:text-brand-700">
+                <summary class="inline-flex cursor-pointer list-none items-center gap-1.5 text-sm text-slate-600 hover:text-brand-700">
                     <i class="bi bi-chevron-right transition-transform group-open:rotate-90"></i>
                     Amenidades y características
                     @if ($selectedFeatures)
@@ -95,17 +95,17 @@
                     @endif
                 </summary>
 
-                <div class="mt-3 space-y-4 rounded-xl border border-stone-200 bg-stone-50 p-4">
+                <div class="mt-3 space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
                     @foreach (\App\Models\Feature::GROUPS as $group => $groupLabel)
                         @if ($features->has($group))
                             <div>
-                                <p class="mb-2 text-xs font-medium uppercase tracking-wide text-stone-500">{{ $groupLabel }}</p>
+                                <p class="mb-2 text-xs font-medium uppercase tracking-wide text-slate-500">{{ $groupLabel }}</p>
                                 <div class="grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
                                     @foreach ($features[$group] as $feature)
-                                        <label class="flex items-center gap-2 text-sm text-stone-700">
+                                        <label class="flex items-center gap-2 text-sm text-slate-700">
                                             <input type="checkbox" name="features[]" value="{{ $feature->id }}"
                                                    @checked(in_array($feature->id, $selectedFeatures, true))
-                                                   class="rounded border-stone-300 text-brand-700 focus:ring-brand-600">
+                                                   class="rounded border-slate-300 text-brand-700 focus:ring-brand-600">
                                             <span>{{ $feature->name }}</span>
                                         </label>
                                     @endforeach
@@ -122,33 +122,33 @@
                     <i class="bi bi-search"></i> Buscar
                 </button>
                 @if (request()->hasAny(['q', 'type', 'operation', 'state', 'min_price', 'max_price', 'bedrooms', 'features']))
-                    <a href="{{ route('public.properties.index') }}" class="text-sm text-stone-500 hover:text-brand-700 hover:underline">
+                    <a href="{{ route('public.properties.index') }}" class="text-sm text-slate-500 hover:text-brand-700 hover:underline">
                         Limpiar filtros
                     </a>
                 @endif
-                <span class="ml-auto text-sm text-stone-500">{{ $properties->total() }} resultados</span>
+                <span class="ml-auto text-sm text-slate-500">{{ $properties->total() }} resultados</span>
             </div>
         </form>
 
         <div class="pt-10 pb-16">
             @if ($properties->isEmpty())
-                <div class="bg-white rounded-2xl border border-stone-200 px-4 py-20 text-center">
-                    <i class="bi bi-search text-4xl text-stone-300"></i>
-                    <p class="mt-3 text-sm text-stone-500">No encontramos inmuebles con esos criterios.</p>
+                <div class="bg-white rounded-2xl border border-slate-200 px-4 py-20 text-center">
+                    <i class="bi bi-search text-4xl text-slate-300"></i>
+                    <p class="mt-3 text-sm text-slate-500">No encontramos inmuebles con esos criterios.</p>
                 </div>
             @else
                 <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($properties as $property)
                         <a href="{{ route('public.properties.show', $property->slug) }}"
-                           class="group bg-white rounded-2xl border border-stone-200 overflow-hidden
-                                  hover:shadow-lg hover:shadow-stone-300/40 hover:-translate-y-0.5 transition-all duration-200">
-                            <div class="aspect-[4/3] bg-stone-100 relative">
+                           class="group bg-white rounded-2xl border border-slate-200 overflow-hidden
+                                  hover:shadow-lg hover:shadow-slate-300/40 hover:-translate-y-0.5 transition-all duration-200">
+                            <div class="aspect-[4/3] bg-slate-100 relative">
                                 @if ($property->cover)
                                     <img src="{{ $property->cover->thumb_url }}" alt="{{ $property->title }}"
                                          class="h-full w-full object-cover">
                                 @else
                                     <div class="h-full w-full flex items-center justify-center">
-                                        <i class="bi bi-image text-3xl text-stone-300"></i>
+                                        <i class="bi bi-image text-3xl text-slate-300"></i>
                                     </div>
                                 @endif
 
@@ -157,7 +157,7 @@
                                         {{ $property->operation === 'rent' ? 'Renta' : 'Venta' }}
                                     </span>
                                     @if ($property->is_featured)
-                                        <span class="inline-flex items-center gap-1 rounded-full bg-accent-500 px-2.5 py-1 text-xs font-medium text-white shadow-sm">
+                                        <span class="inline-flex items-center gap-1 rounded-full bg-accent-600 px-2.5 py-1 text-xs font-medium text-white shadow-sm">
                                             <i class="bi bi-stars"></i> Destacada
                                         </span>
                                     @endif
@@ -167,25 +167,25 @@
                             <div class="p-4">
                                 <p class="font-serif text-xl font-semibold text-brand-900">
                                     ${{ number_format($property->price, 0) }}
-                                    <span class="font-sans text-sm font-normal text-stone-500">
+                                    <span class="font-sans text-sm font-normal text-slate-500">
                                         {{ $property->currency }}{{ $property->operation === 'rent' ? ' / mes' : '' }}
                                     </span>
                                 </p>
 
-                                <h3 class="mt-1 font-medium text-stone-800 line-clamp-2 group-hover:text-brand-700 transition-colors">
+                                <h3 class="mt-1 font-medium text-slate-800 line-clamp-2 group-hover:text-brand-700 transition-colors">
                                     {{ $property->title }}
                                 </h3>
 
-                                <p class="mt-1.5 flex items-center gap-1 text-sm text-stone-500">
+                                <p class="mt-1.5 flex items-center gap-1 text-sm text-slate-500">
                                     <i class="bi bi-geo-alt"></i>
                                     {{ $property->city?->name }}{{ $property->state ? ', '.$property->state->name : '' }}
                                 </p>
 
-                                <div class="mt-3 pt-3 border-t border-stone-100 flex gap-3 text-xs text-stone-600">
-                                    <span class="inline-flex items-center gap-1"><i class="bi bi-door-closed text-stone-400"></i> {{ $property->bedrooms }}</span>
-                                    <span class="inline-flex items-center gap-1"><i class="bi bi-droplet text-stone-400"></i> {{ $property->bathrooms }}</span>
+                                <div class="mt-3 pt-3 border-t border-slate-100 flex gap-3 text-xs text-slate-600">
+                                    <span class="inline-flex items-center gap-1"><i class="bi bi-door-closed text-slate-400"></i> {{ $property->bedrooms }}</span>
+                                    <span class="inline-flex items-center gap-1"><i class="bi bi-droplet text-slate-400"></i> {{ $property->bathrooms }}</span>
                                     @if ($property->built_area)
-                                        <span class="inline-flex items-center gap-1"><i class="bi bi-rulers text-stone-400"></i> {{ (int) $property->built_area }} m²</span>
+                                        <span class="inline-flex items-center gap-1"><i class="bi bi-rulers text-slate-400"></i> {{ (int) $property->built_area }} m²</span>
                                     @endif
                                 </div>
                             </div>

@@ -357,9 +357,9 @@ if (publicEl) {
 
         L.circle(coords, {
             radius: 300,
-            color: '#275342',
+            color: '#1b3ac4',
             weight: 2,
-            fillColor: '#3f7d63',
+            fillColor: '#2c5cf6',
             fillOpacity: 0.18,
         }).addTo(map);
 
