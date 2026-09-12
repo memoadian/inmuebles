@@ -35,6 +35,14 @@ return [
         ],
     ],
 
+    'mapbox' => [
+        // Token público (pk.…): viaja al navegador, así que restringe su uso
+        // por dominio desde el panel de Mapbox.
+        'token' => env('MAPBOX_TOKEN'),
+        'style' => env('MAPBOX_STYLE', 'mapbox://styles/mapbox/light-v11'),
+        'style_picker' => env('MAPBOX_STYLE_PICKER', 'mapbox://styles/mapbox/streets-v12'),
+    ],
+
     'nominatim' => [
         // Nominatim exige identificarse; usa un dominio/correo real del proyecto.
         'user_agent' => env('NOMINATIM_USER_AGENT', 'Ubiqa/1.0 (contacto@ubiqamx.com)'),

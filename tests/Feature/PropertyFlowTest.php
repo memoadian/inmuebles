@@ -455,6 +455,64 @@ class PropertyFlowTest extends TestCase
         $this->assertStringContainsString('DCTDecode', $response->getContent());
     }
 
+    /** @return Property */
+    private function publicada(array $attributes = [])
+    {
+        return Property::factory()->create(array_merge([
+            'user_id' => $this->agent('agente'.uniqid().'@test.com')->id,
+            'status' => 'published',
+            'published_at' => now(),
+        ], $attributes));
+    }
+
+    public function test_la_portada_lleva_el_hero_y_el_catalogo_los_resultados(): void
+    {
+        $this->publicada(['title' => 'Casa publicada']);
+
+        $this->get('/')->assertOk()->assertSee('Cada casa que ves');
+
+        $this->get('/propiedades')
+            ->assertOk()
+            ->assertDontSee('Cada casa que ves')
+            ->assertSee('Casa publicada')
+            ->assertSee('resultados');
+    }
+
+    public function test_el_catalogo_ordena_por_precio(): void
+    {
+        $this->publicada(['title' => 'La barata', 'price' => 1_000_000]);
+        $this->publicada(['title' => 'La cara', 'price' => 9_000_000]);
+
+        $this->get('/propiedades?sort=price_desc')
+            ->assertOk()
+            ->assertSeeInOrder(['La cara', 'La barata']);
+
+        $this->get('/propiedades?sort=price_asc')
+            ->assertOk()
+            ->assertSeeInOrder(['La barata', 'La cara']);
+    }
+
+    public function test_el_catalogo_filtra_por_la_zona_visible_del_mapa(): void
+    {
+        $this->publicada(['title' => 'Dentro del mapa', 'latitude' => 19.40, 'longitude' => -99.15]);
+        $this->publicada(['title' => 'Fuera del mapa', 'latitude' => 25.68, 'longitude' => -100.31]);
+
+        $this->get('/propiedades?bounds=19.0,-99.5,19.9,-98.9')
+            ->assertOk()
+            ->assertSee('Dentro del mapa')
+            ->assertDontSee('Fuera del mapa')
+            ->assertSee('En la zona del mapa');
+    }
+
+    public function test_un_orden_inventado_no_rompe_el_catalogo(): void
+    {
+        $this->publicada(['title' => 'Sigue apareciendo']);
+
+        $this->get('/propiedades?sort='.urlencode('price; drop table properties'))
+            ->assertOk()
+            ->assertSee('Sigue apareciendo');
+    }
+
     public function test_la_ficha_publica_ofrece_compartir_y_descargar(): void
     {
         $property = Property::factory()->create([
