@@ -32,7 +32,7 @@ class PublicPropertyController extends Controller
     {
         $properties = Property::query()
             ->published()
-            ->with(['type', 'city', 'state', 'cover'])
+            ->with(['type', 'city', 'state', 'neighborhood', 'cover'])
             ->when($request->filled('q'), function (Builder $q) use ($request) {
                 $term = $request->string('q')->value();
                 $q->where(fn ($sub) => $sub->where('title', 'like', "%{$term}%")

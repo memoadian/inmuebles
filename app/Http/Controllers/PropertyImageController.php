@@ -18,7 +18,12 @@ class PropertyImageController extends Controller
         $request->validate([
             'images' => ['required', 'array', 'max:20'],
             'images.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:8192'],
-        ], [], ['images' => 'fotos']);
+        ], [
+            'images.*.max' => 'Cada foto debe pesar máximo 8 MB.',
+            'images.*.mimes' => 'Solo se aceptan fotos JPG, PNG o WebP.',
+            'images.*.image' => 'Uno de los archivos no es una imagen válida.',
+            'images.*.uploaded' => 'No se pudo subir una de las fotos (¿pesa más de 8 MB?).',
+        ], ['images' => 'fotos', 'images.*' => 'foto']);
 
         foreach ($request->file('images') as $file) {
             $this->service->store($property, $file);

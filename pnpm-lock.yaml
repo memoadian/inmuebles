@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      leaflet:
-        specifier: ^1.9.4
-        version: 1.9.4
+      mapbox-gl:
+        specifier: ^3.29.0
+        version: 3.30.0
     devDependencies:
       '@tailwindcss/vite':
         specifier: ^4.0.0
@@ -630,9 +630,6 @@ packages:
     peerDependencies:
       vite: ^7.0.0
 
-  leaflet@1.9.4:
-    resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
-
   lightningcss-android-arm64@1.32.0:
     resolution: {integrity: sha512-YK7/ClTt4kAK0vo6w3X+Pnm0D2cf2vPHbhOXdoNti1Ga0al1P4TBZhwjATvjNwLEBCnKvjJc2jQgHXH0NEwlAg==}
     engines: {node: '>= 12.0.0'}
@@ -709,6 +706,9 @@ packages:
 
   magic-string@0.30.21:
     resolution: {integrity: sha512-vd2F4YUyEXKGcLHoq+TEyCjxueSeHnFxyyjNp80yg0XV4vUhnDer/lvvlqM/arB5bXQN5K2/3oinyCRyx8T2CQ==}
+
+  mapbox-gl@3.30.0:
+    resolution: {integrity: sha512-26m0CSBszLkvbdVWf2oIZ3SjqCuResxJKEbupwwSyNwbwJAcgnMhDy2Yl5cSgtUxeamUJ1UeXRqpBmGEUVaAeQ==}
 
   math-intrinsics@1.1.0:
     resolution: {integrity: sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g==}
@@ -1307,8 +1307,6 @@ snapshots:
       vite: 7.3.6(jiti@2.7.0)(lightningcss@1.32.0)
       vite-plugin-full-reload: 1.2.0
 
-  leaflet@1.9.4: {}
-
   lightningcss-android-arm64@1.32.0:
     optional: true
 
@@ -1361,6 +1359,8 @@ snapshots:
   magic-string@0.30.21:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  mapbox-gl@3.30.0: {}
 
   math-intrinsics@1.1.0: {}
 

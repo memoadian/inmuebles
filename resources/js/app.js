@@ -25,11 +25,25 @@ const imageInput = document.getElementById('imageInput');
 const imageFileList = document.getElementById('imageFileList');
 
 if (imageDropzone && imageInput) {
+    // Mismo tope que la validación del servidor (max:8192 KB).
+    const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+
     const renderSelectedFiles = (files) => {
         if (!imageFileList) return;
-        imageFileList.textContent = files.length
-            ? `${files.length} archivo(s) seleccionados: ${Array.from(files).map((f) => f.name).join(', ')}`
+
+        const list = Array.from(files);
+        const tooBig = list.filter((f) => f.size > MAX_IMAGE_BYTES);
+
+        imageFileList.textContent = list.length
+            ? `${list.length} archivo(s) seleccionados: ${list.map((f) => f.name).join(', ')}`
             : '';
+
+        // Avisar antes de enviar: un archivo que excede el límite rebota en el
+        // servidor y el usuario solo vería el error después de esperar la subida.
+        imageFileList.classList.toggle('text-red-600', tooBig.length > 0);
+        if (tooBig.length) {
+            imageFileList.textContent += ` — supera los 8 MB: ${tooBig.map((f) => f.name).join(', ')}`;
+        }
     };
 
     // Evita que el navegador abra el archivo si el usuario falla la zona.

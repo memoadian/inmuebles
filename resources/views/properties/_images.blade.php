@@ -16,8 +16,12 @@
               enctype="multipart/form-data" class="mb-4">
             @csrf
 
+            {{-- relative: el input sr-only es position:absolute; sin un ancestro
+                 posicionado dentro del contenedor scrolleable queda anclado al <html>
+                 y, al enfocarlo con el clic, el navegador desplaza el documento
+                 entero (overflow-hidden) y el panel se ve en blanco. --}}
             <label for="imageInput" id="imageDropzone"
-                   class="flex flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-dashed
+                   class="relative flex flex-col items-center justify-center gap-1.5 rounded-lg border-2 border-dashed
                           border-slate-300 bg-slate-50 px-4 py-8 text-center cursor-pointer transition-colors
                           hover:border-slate-400 hover:bg-slate-100">
                 <i class="bi bi-cloud-arrow-up text-3xl text-slate-400"></i>

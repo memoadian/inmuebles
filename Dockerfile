@@ -45,6 +45,9 @@ RUN sed -i "s/^user = www-data/user = sail/; s/^group = www-data/group = sail/" 
 # Configurar Nginx
 COPY docker/nginx/default.conf /etc/nginx/sites-available/default
 
+# Límites de subida de PHP alineados con nginx y con el validador de fotos
+COPY docker/php/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
+
 # Configurar Supervisor
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 

@@ -33,15 +33,21 @@ class PropertyImageService
         $path = "{$dir}/{$uuid}.webp";
         $thumbPath = "{$dir}/{$uuid}_thumb.webp";
 
-        $image = Image::decodeSplFileInfo($file);
         $encoder = new WebpEncoder(quality: self::QUALITY);
 
-        // scaleDown nunca agranda: una foto pequeña se sube tal cual.
-        $full = (clone $image)->scaleDown(self::MAX_EDGE, self::MAX_EDGE);
-        $thumb = (clone $image)->cover(self::THUMB_WIDTH, self::THUMB_HEIGHT);
+        // Una foto de celular (12 MP) ocupa ~50 MB decodificada en GD, así que
+        // no clonamos el original: se reduce en sitio y la miniatura se saca de
+        // la versión ya reducida. scaleDown nunca agranda: una foto pequeña se
+        // sube tal cual.
+        $full = Image::decodeSplFileInfo($file)->scaleDown(self::MAX_EDGE, self::MAX_EDGE);
+        $width = $full->width();
+        $height = $full->height();
 
         Storage::disk($disk)->put($path, (string) $full->encode($encoder), 'public');
+
+        $thumb = $full->cover(self::THUMB_WIDTH, self::THUMB_HEIGHT);
         Storage::disk($disk)->put($thumbPath, (string) $thumb->encode($encoder), 'public');
+        unset($full, $thumb);
 
         // La primera imagen de la propiedad queda como portada.
         $isFirst = ! $property->images()->exists();
@@ -53,8 +59,8 @@ class PropertyImageService
             'original_name' => $file->getClientOriginalName(),
             'size' => $file->getSize(),
             'mime' => 'image/webp',
-            'width' => $full->width(),
-            'height' => $full->height(),
+            'width' => $width,
+            'height' => $height,
             'order' => ($property->images()->max('order') ?? -1) + 1,
             'is_cover' => $isFirst,
         ]) ?: throw new \RuntimeException('No se pudo registrar la imagen.');

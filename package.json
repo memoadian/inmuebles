@@ -16,6 +16,6 @@
         "vite": "^7.0.7"
     },
     "dependencies": {
-        "leaflet": "^1.9.4"
+        "mapbox-gl": "^3.29.0"
     }
 }

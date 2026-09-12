@@ -17,6 +17,8 @@
     <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="32x32">
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
     <meta name="theme-color" content="#0b1440">
+    <meta name="mapbox-token" content="{{ config('services.mapbox.token') }}">
+    <meta name="mapbox-style" content="{{ config('services.mapbox.style') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700|fraunces:500,600,700" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -25,11 +27,20 @@
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col text-slate-800 antialiased">
     <header class="sticky top-0 z-40 border-b border-white/10 bg-brand-950/85 text-white backdrop-blur">
-        <div class="mx-auto max-w-7xl px-4 h-18 flex items-center justify-between py-3">
-            <a href="{{ route('public.properties.index') }}" aria-label="{{ config('app.name', 'Ubiqa') }} — inicio">
-                <img src="{{ asset('images/logo-ubiqa-horizontal.png') }}" alt="{{ config('app.name', 'Ubiqa') }}"
-                     width="520" height="173" class="h-9 w-auto">
-            </a>
+        <div class="mx-auto max-w-7xl px-4 h-18 flex items-center justify-between gap-6 py-3">
+            <div class="flex items-center gap-7">
+                <a href="{{ route('home') }}" aria-label="{{ config('app.name', 'Ubiqa') }} — inicio">
+                    <img src="{{ asset('images/logo-ubiqa-horizontal.png') }}" alt="{{ config('app.name', 'Ubiqa') }}"
+                         width="520" height="173" class="h-9 w-auto">
+                </a>
+                <nav class="hidden md:flex items-center gap-5 text-sm text-slate-300">
+                    <a href="{{ route('public.properties.index', ['operation' => 'sale']) }}"
+                       class="hover:text-white transition-colors">Comprar</a>
+                    <a href="{{ route('public.properties.index', ['operation' => 'rent']) }}"
+                       class="hover:text-white transition-colors">Rentar</a>
+                    <a href="{{ route('register') }}" class="hover:text-white transition-colors">Publica tu inmueble</a>
+                </nav>
+            </div>
 
             <nav class="flex items-center gap-1.5 text-sm">
                 @auth
