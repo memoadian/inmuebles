@@ -59,7 +59,12 @@
                         </span>
                     @endif
 
-                    <div class="absolute inset-x-0 bottom-0 flex opacity-0 group-hover:opacity-100 transition-opacity">
+                    {{-- opacity-0 + group-hover solo revela estos botones con mouse: en
+                         touch (celular/tablet, sin importar el ancho) no hay :hover
+                         persistente y quedaban inalcanzables. pointer-fine detecta
+                         mouse real (no el viewport), así que un iPad sigue viendo
+                         los botones siempre visibles igual que un celular. --}}
+                    <div class="absolute inset-x-0 bottom-0 flex opacity-100 pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 transition-opacity">
                         @can('reorderImages', $property)
                             @unless ($image->is_cover)
                                 <form method="POST" action="{{ route('properties.images.reorder', $property) }}" class="flex-1">

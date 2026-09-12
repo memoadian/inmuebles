@@ -15,4 +15,10 @@ export default defineConfig({
             ignored: ['**/storage/framework/views/**'],
         },
     },
+    build: {
+        // map.js es su propio entry (mapbox-gl, ~1.9 MB) y solo se carga en las
+        // vistas con mapa; el default de 500 KB de Rollup solo genera ruido en
+        // el log de build para un caso ya esperado.
+        chunkSizeWarningLimit: 2000,
+    },
 });
